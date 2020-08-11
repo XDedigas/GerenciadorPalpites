@@ -1,0 +1,65 @@
+﻿@model List<GerenciadorPalpites.Web.Models.EsporteViewModel>
+@{
+    Layout = "~/Views/Shared/_Cadastro.cshtml";
+    ViewBag.Title = "Esporte";
+    ViewBag.Lista = Model;
+}
+
+@section Styles {
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Content/Cadastro/Esporte.css" rel="stylesheet" />
+}
+
+@section TituloGrid {
+    <th><span class="coluna-ordenacao" data-campo="nome">Nome</span></th>
+    <th>Ação</th>
+}
+
+@section CamposCadastro {
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("txt_nome", "Nome", new { @class = "control-label" })
+            @Html.TextBox("txt_nome", null, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <script>
+        var tituloPagina = '@ViewBag.Title';
+        var url_excluir = '@Url.Action("ExcluirEsporte", "CadEsporte")';
+        var url_confirmar = '@Url.Action("SalvarEsporte", "CadEsporte")';
+        var url_page_click = '@Url.Action("EsportePagina", "CadEsporte")';
+        var url_filtro_change = '@Url.Action("EsportePagina", "CadEsporte")';
+        var url_tam_pag_change = '@Url.Action("EsportePagina", "CadEsporte")';
+        var url_alterar = '@Url.Action("RecuperarEsporte", "CadEsporte")';
+        var linhas = [];
+
+        @{
+            var linha = 0;
+            foreach (var item in Model)
+            {
+                linha++;
+                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
+                {
+                    @:linhas.push(@Html.Raw(Json.Encode(item)));
+                                                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    </script>
+    <script id="template-grid" type="x-tmpl-mustache">
+        <tr data-id="{{ Id }}">
+            <td>{{ Nome }}</td>
+            <td>
+                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
+                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
+            </td>
+        </tr>
+    </script>
+    <script src="~/Scripts/Cadastro/Esporte.js"></script>
+}

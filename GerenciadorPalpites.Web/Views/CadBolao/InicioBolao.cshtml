@@ -1,0 +1,78 @@
+﻿@model List<GerenciadorPalpites.Web.Models.BolaoViewModel>
+@{
+    Layout = "~/Views/Shared/_Cadastro.cshtml";
+    ViewBag.Title = "Bolões";
+    ViewBag.Lista = Model;
+}
+@section Styles {
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Content/Cadastro/Bolao.css" rel="stylesheet" />
+}
+@section TituloGrid {
+    <th><span class="coluna-ordenacao" data-campo="nome">Nome</span></th>
+    <th><span class="coluna-ordenacao" data-campo="idCampeonato">Campeonato</span></th>
+    <th>Ação</th>
+}
+@section CamposCadastro {
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("txt_nome", "Nome", new { @class = "control-label" })
+            @Html.TextBox("txt_nome", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("ddl_campeonato", "Campeonato", new { @class = "control-label" })
+            @Html.DropDownList("ddl_campeonato", new SelectList(ViewBag.Campeonato, "Id", "Nome"), new { @class = "form-control" })
+        </div>
+    </div>
+}
+@section Scripts{
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <script>
+        var tituloPagina = '@ViewBag.Title';
+        var url_excluir = '@Url.Action("ExcluirBolao", "CadBolao")';
+        var url_participar = '@Url.Action("SalvarUsuarioBolao", "CadUsuarioBolao")'
+        var url_confirmar = '@Url.Action("SalvarBolao", "CadBolao")';
+        var url_page_click = '@Url.Action("BolaoPagina", "CadBolao")';
+        var url_tam_pag_change = '@Url.Action("BolaoPagina", "CadBolao")';
+        var url_filtro_change = '@Url.Action("BolaoPagina", "CadBolao")';
+        var url_alterar = '@Url.Action("RecuperarBolao", "CadBolao")';
+        var linhas = [];
+
+        @{
+            var linha = 0;
+            foreach (var item in Model)
+            {
+                linha++;
+                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
+                {
+                    @:linhas.push(@Html.Raw(Json.Encode(item)));
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    </script>
+    <script id="template-grid-alterar" type="x-tmpl-mustache">
+        <tr data-id="{{ Id }}">
+            <td>{{ Nome }}</td>
+            <td>{{ Campeonato.Nome }}</td>
+            <td>
+                <a class="btn btn-success btn-alterar" role="button"><i class="glyphicon glyphicon-plus"></i> Participar</a>
+            </td>
+        </tr>
+    </script>
+    <script id="template-grid-confirmar" type="x-tmpl-mustache">
+        <tr data-id="{{ Id }}">
+            <td>{{ Nome }}</td>
+            <td>{{ NomeCampeonato }}</td>
+            <td>
+                <a class="btn btn-success btn-alterar" role="button"><i class="glyphicon glyphicon-plus"></i> Participar</a>
+            </td>
+        </tr>
+    </script>
+    <script src="~/Scripts/Cadastro/Bolao.js"></script>
+}

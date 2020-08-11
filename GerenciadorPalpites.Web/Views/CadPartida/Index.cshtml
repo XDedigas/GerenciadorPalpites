@@ -1,0 +1,106 @@
+﻿@model List<GerenciadorPalpites.Web.Models.PartidaViewModel>
+@{
+    Layout = "~/Views/Shared/_Cadastro.cshtml";
+    ViewBag.Title = "Partidas";
+    ViewBag.Lista = Model;
+}
+
+@section Styles {
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Content/Cadastro/Partida.css" rel="stylesheet" />
+    <style>
+        .dialogo > .modal-dialog {
+            width: 700px !important;
+        }
+    </style>
+}
+
+@section TituloGrid {
+    <th><span class="coluna-ordenacao" data-campo="ddl_TimeCasa">Time Casa</span></th>
+    <th><span class="coluna-ordenacao" data-campo="ddl_TimeFora">Time Fora</span></th>
+    <th><span class="coluna-ordenacao" data-campo="ddl_Campeonato">Campeonato</span></th>
+    <th>Ação</th>
+}
+
+@section CamposCadastro {
+    <div class="row">
+        <div class="col-md-4">
+            @Html.Label("ddl_TimeCasa", "TimeCasa", new { @class = "control-label" })
+            @Html.DropDownList("ddl_TimeCasa", new SelectList(ViewBag.Time, "Id", "Nome"), new { @class = "form-control" })
+        </div>
+        <div class="col-md-4">
+            @Html.Label("ddl_TimeFora", "TimeFora", new { @class = "control-label" })
+            @Html.DropDownList("ddl_TimeFora", new SelectList(ViewBag.Time, "Id", "Nome"), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.Label("ddl_Campeonato", "Campeonato", new { @class = "control-label" })
+            @Html.DropDownList("ddl_Campeonato", new SelectList(ViewBag.Campeonato, "Id", "Nome"), new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script>
+        var tituloPagina = '@ViewBag.Title';
+        var url_excluir = '@Url.Action("ExcluirPartida", "CadPartida")';
+        var url_confirmar = '@Url.Action("SalvarPartida", "CadPartida")';
+        var url_page_click = '@Url.Action("PartidaPagina", "CadPartida")';
+        var url_tam_pag_change = '@Url.Action("PartidaPagina", "CadPartida")';
+        var url_filtro_change = '@Url.Action("PartidaPagina", "CadPartida")';
+        var url_alterar = '@Url.Action("RecuperarPartida", "CadPartida")';
+        var linhas = [];
+
+        @{
+            var linha = 0;
+            foreach (var item in Model)
+            {
+                linha++;
+                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
+                {
+                    @:linhas.push(@Html.Raw(Json.Encode(item)));
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    </script>
+    <script id="template-grid" type="x-tmpl-mustache">
+        <tr data-id="{{ Id }}" data-imagem="{{ Imagem }}">
+            <td>{{ Nome }}</td>
+            <td>{{ Campeonato }}</td>
+            <td>{{ #Ativo }}SIM{{ /Ativo }}{{ ^Ativo }}NÃO{{ /Ativo }}</td>
+            <td>
+                <a class="btn btn-default btn-exibir-imagem" role="button"><i class="glyphicon glyphicon-picture"></i></a>
+                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
+                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
+            </td>
+        </tr>
+    </script>
+    <script id="template-imagem" type="x-tmpl-mustache">
+        <fieldset>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="/Content/Imagens/{{ Imagem }}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="modal-footer">
+                            <a id="btn_sair_imagem" class="btn btn-default" role="button" data-dismiss="modal">
+                                <i class="glyphicon glyphicon-remove"></i> Sair
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </script>
+    <script src="~/Scripts/Cadastro/Partida.js"></script>
+}

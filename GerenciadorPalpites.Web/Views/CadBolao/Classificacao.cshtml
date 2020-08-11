@@ -1,0 +1,58 @@
+﻿@model List<GerenciadorPalpites.Web.Models.ClassificacaoViewModel>
+@{
+    Layout = "~/Views/Shared/_Classificacao.cshtml";
+    ViewBag.Title = "Classifição";
+    ViewBag.Lista = Model;
+}
+@section Styles {
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Content/Cadastro/Classificacao.css" rel="stylesheet" />
+}
+@section TituloGrid {
+    <th><span class="coluna-ordenacao" data-campo="variacao">Variação</span></th>
+    <th><span class="coluna-ordenacao" data-campo="posicao">#</span></th>
+    <th><span class="coluna-ordenacao" data-campo="nome">Nome</span></th>
+    <th><span class="coluna-ordenacao" data-campo="total">Total</span></th>
+    <th><span class="coluna-ordenacao" data-campo="placarCheio">PC</span></th>
+    <th><span class="coluna-ordenacao" data-campo="placarVencedor">PV</span></th>
+    <th><span class="coluna-ordenacao" data-campo="placarPerdedor">PP</span></th>
+    <th><span class="coluna-ordenacao" data-campo="acertouVencedor">AV</span></th>
+}
+@section Scripts{
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <script>
+        var tituloPagina = '@ViewBag.Title';
+        var url_page_click = '@Url.Action("ClassificacaoPagina", "Classificacao")';
+        var url_tam_pag_change = '@Url.Action("ClassificacaoPagina", "Classificacao")';
+        var url_filtro_change = '@Url.Action("ClassificacaoPagina", "Classificacao")';
+        var linhas = [];
+
+        @{
+            var linha = 0;
+            foreach (var item in Model)
+            {
+                linha++;
+                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
+                {
+                    @:linhas.push(@Html.Raw(Json.Encode(item)));
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    </script>
+    <script id="template-grid-alterar" type="x-tmpl-mustache">
+        <tr data-id="{{ Id }}">
+            <td>{{ Variacao }}</td>
+            <td>{{ Posicao }}</td>
+            <td>{{ Nome }}</td>
+            <td>{{ Total }}</td>
+            <td>{{ PlacarCheio }}</td>
+            <td>{{ PlacarVencedor }}</td>
+            <td>{{ PlacarPerdedor }}</td>
+            <td>{{ AcertouVencedor }}</td>
+        </tr>
+    </script>
+}
