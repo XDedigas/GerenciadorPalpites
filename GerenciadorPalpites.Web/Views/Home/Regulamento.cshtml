@@ -1,90 +1,81 @@
 ﻿@{
     ViewBag.Title = "Regulamento";
 }
-<h1>@ViewBag.Title do Gerenciador de Palpites.</h1>
+<h1>@ViewBag.Title do Gerenciador de Palpites</h1>
 
 <h4>Regulamento geral dos bolões</h4>
 <h2>Gerenciador de palpites - Regulamento de pontuações</h2>
-<table align="center" border="1">
+<br />
+<table class="table table-bordered table-striped" style="width: 50%; margin: auto;">
     <thead>
         <tr>
-            <th scope="col">
-                <p>
-                    <strong>Tipo de Acerto</strong>
-                </p>
-            </th>
-            <th scope="col">
-                <p>
-                    <strong>Sigla</strong>
-                </p>
-            </th>
-            <th scope="col">
-                <p>
-                    <strong>Pontos</strong>
-                </p>
-            </th>
+            <th scope="col">Tipo de Acerto</th>
+            <th scope="col">Sigla</th>
+            <th scope="col">Pontos</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>
-                <p>
-                    <strong>&nbsp;</strong>Placar Exato
-                </p>
-            </td>
-            <td align="center">
-                <p>
-                    <strong>&nbsp;</strong>PE
-                </p>
-            </td>
-            <td align="center">
-                <p>
-                    <strong>&nbsp;</strong>5
-                </p>
-            </td>
+            <td>Placar Exato</td>
+            <td align="center">PE</td>
+            <td align="center">5</td>
         </tr>
         <tr>
-            <td>
-                <p>
-                    <strong>&nbsp;</strong>Acertar Vencedor
-                </p>
-            </td>
-            <td align="center">
-                <p>
-                    <strong>&nbsp;</strong>AV
-                </p>
-            </td>
-            <td align="center">
-                <p>
-                    <strong>&nbsp;</strong>3
-                </p>
-            </td>
+            <td>Acertar Vencedor</td>
+            <td align="center">AV</td>
+            <td align="center">3</td>
         </tr>
         <tr>
-            <td>
-                <p>
-                    <strong>&nbsp;</strong>Acertar Gols de um dos Times
-                </p>
-            </td>
-            <td align="center">
-                <p>
-                    <strong>&nbsp;</strong>AGT
-                </p>
-            </td>
-            <td align="center">
-                <p>
-                    <strong>&nbsp;</strong>1
-                </p>
-            </td>
+            <td>Acertar Gols de um dos Times</td>
+            <td align="center">AGT</td>
+            <td align="center">1</td>
         </tr>
     </tbody>
 </table>
-<h5>Para conseguir os 5 pontos, o palpite do usuário precisa ser certeiro. Ou seja, se o jogo terminou 2x1 para o time da casa, o usuário tem que ter palpitado 2x1 para o time mandante.</h5>
-<h5>Para conseguir os 3 pontos, o palpite do usuário precisa acertar o vencedor da partida. Ou seja, se o jogo terminou 2x1 para o time da casa, o usuário tem que ter palpitado que o time da casa venceu o jogo por qualquer placar exceto 2x1.</h5>
-<h5>Para conseguir o 1 ponto, o palpite do usuário precisa acertar a quantidade de gols de uma das equipes. Ou seja, se o jogo terminou 2x1 para o time da casa, o usuário tem que ter palpitado a quantidade de gols de um dos dois times. Ex: 0x1 para o time forda de casa.</h5>
-<h2>Exemplos de pontuação:</h2>
-<h3>Partida: 2x0</h3>
-<h5>Palpites:</h5>
-<h5>2x0: Placar Exato (5 pontos)</h5>
-<h5>3x2: Acertou o time vencedor (3 pontos)</h5>
-<h5>2x1: Acertou o placar de um dos times (1 ponto)</h5>
+<br />
+<p>Para conseguir 5 pontos, o palpite do usuário precisa ser certeiro. Ou seja, se o jogo terminou 2x1 para o time da casa, o usuário tem que ter palpitado 2x1 para o time mandante.</p>
+<p>Para conseguir 3 pontos, o palpite do usuário precisa acertar o vencedor da partida. Ou seja, se o jogo terminou 2x1 para o time da casa, o usuário tem que ter palpitado que o time da casa venceu o jogo por qualquer placar, exceto 2x1.</p>
+<p>Para conseguir 1 ponto, o palpite do usuário precisa acertar a quantidade de gols de uma das equipes. Ou seja, se o jogo terminou 2x1 para o time da casa, o usuário tem que ter palpitado a quantidade de gols de um dos dois times. Ex.: 0x1 para o time visitante.</p>
+<h3>Exemplos de pontuação:</h3>
+<table class="table table-bordered table-striped text-center">
+    <thead>
+        <tr>
+            <th scope="col">Placar final</th>
+            <th scope="col">Palpite</th>
+            <th scope="col">Tipos de acerto</th>
+            <th scope="col">Pontuação</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2x0</td>
+            <td>2x0</td>
+            <td>PE</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>1x2</td>
+            <td>1x0</td>
+            <td>AGT</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>3x1</td>
+            <td>3x2</td>
+            <td>AV + AGT</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>0x0</td>
+            <td>1x1</td>
+            <td>AV</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>4x0</td>
+            <td>0x2</td>
+            <td>-</td>
+            <td>0</td>
+        </tr>
+    </tbody>
+</table>
