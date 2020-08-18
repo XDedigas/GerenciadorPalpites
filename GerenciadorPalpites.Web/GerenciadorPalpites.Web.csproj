@@ -356,7 +356,7 @@
     <Content Include="Views\CadBolao\Index.cshtml" />
     <Content Include="Views\CadUsuario\Index.cshtml" />
     <Content Include="Views\Conta\Login.cshtml" />
-    <Content Include="Views\Shared\_MeusBoloes.cshtml" />
+    <Content Include="Views\Shared\_CadastroSemIncluir.cshtml" />
     <Content Include="Views\CadPerfil\Index.cshtml" />
     <Content Include="Views\CadCampeonato\Index.cshtml" />
     <Content Include="Views\CadEsporte\Index.cshtml" />
