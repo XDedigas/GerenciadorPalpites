@@ -45,23 +45,21 @@
                                 <li>@Html.ActionLink("Usuários", "Index", "CadUsuario")</li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Operações
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Entrada de produtos", "Index", "OperEntradaProduto")</li>
-                                <li>@Html.ActionLink("Saída de produtos", "Index", "OperSaidaProduto")</li>
-                                <li>@Html.ActionLink("Lançamento de perdas de produtos", "Index", "OperLancamentoPerdaProduto")</li>
-                                <li>@Html.ActionLink("Inventário de estoque", "Index", "OperInventario")</li>
-                            </ul>
-                        </li>
                     </ul>
                     using (Html.BeginForm("LogOff", "Conta", FormMethod.Post, new { id = "logoffForm" }))
                     {
                         <ul class="nav navbar-nav navbar-right">
-                            <li>@Html.ActionLink("Sobre", "Sobre", "Home")</li>
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Ajuda
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Sobre", "Sobre", "Home")</li>
+                                    <li>@Html.ActionLink("Regulamento", "Regulamento", "Home")</li>
+                                    <li>@Html.ActionLink("Perguntas Frequentes", "PerguntasFrequentes", "Home")</li>
+                                </ul>
+                            </li>
                             <li>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     @User.Identity.Name

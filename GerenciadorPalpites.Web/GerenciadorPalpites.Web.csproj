@@ -375,6 +375,8 @@
     <Content Include="Views\Shared\_InicioBolao.cshtml" />
     <Content Include="Views\CadBolao\Classificacao.cshtml" />
     <Content Include="Views\Shared\_Classificacao.cshtml" />
+    <Content Include="Views\Home\Regulamento.cshtml" />
+    <Content Include="Views\Home\PerguntasFrequentes.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

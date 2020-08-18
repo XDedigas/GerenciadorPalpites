@@ -15,5 +15,17 @@ namespace GerenciadorPalpites.Web.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        public ActionResult Regulamento()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult PerguntasFrequentes()
+        {
+            return View();
+        }
     }
 }
