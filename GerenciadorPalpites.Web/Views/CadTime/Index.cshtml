@@ -1,7 +1,7 @@
 ﻿@model List<GerenciadorPalpites.Web.Models.TimeViewModel>
 @{
-    Layout = "~/Views/Shared/_Cadastro.cshtml";
-    ViewBag.Title = "Time";
+    Layout = "~/Views/Shared/_CadastroSemIncluir.cshtml";
+    ViewBag.Title = "Cadastro de Times";
     ViewBag.Lista = Model;
 }
 
@@ -87,14 +87,13 @@
             }
         }
     </script>
-    <script id="template-grid" type="x-tmpl-mustache">
+    <script id="template-grid-alterar" type="x-tmpl-mustache">
         <tr data-id="{{ Id }}">
             <td>{{ Nome }}</td>
             <td>{{ País }}</td>
             <td>{{ #Ativo }}SIM{{ /Ativo }}{{ ^Ativo }}NÃO{{ /Ativo }}</td>
             <td>
-                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
-                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
+                <a class="btn btn-danger btn-success" role="button"><i class="glyphicon glyphicon-transfer"></i> Comparar</a>
             </td>
         </tr>
     </script>
