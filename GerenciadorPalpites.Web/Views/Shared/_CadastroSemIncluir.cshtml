@@ -44,27 +44,24 @@
         </div>
         @if (ViewBag.QuantPaginas > 1)
         {
-        <div class="row">
-            <div class="col-md-12">
-                <nav>
-                    <ul class="pagination">
-                        <li class="page-item disabled" style="pointer-events: none;">
-                            <a class="page-link" href="#">Primeiro</a>
-                        </li>
-                        <li class="page-item disabled" style="pointer-events: none;">
-                            <a class="page-link" href="#">Anterior</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        @for (int i = 2; i <= ViewBag.QuantPaginas; i++)
-                        {
-                            <li class="page-item"><a class="page-link" href="#">@i</a></li>
-                        }
-                        <li class="page-item"><a class="page-link" href="#">Próximo</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Último</a></li>
-                    </ul>
-                </nav>
+            @Html.Hidden("qtd_paginas", (string)ViewBag.QuantPaginas.ToString())
+            <div class="row">
+                <div class="col-md-12">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item disabled first-page" style="pointer-events: none;"><a class="page-link" href="#">Primeiro</a></li>
+                            <li class="page-item disabled prev-page" style="pointer-events: none;"><a class="page-link" href="#">Anterior</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            @for (int i = 2; i <= (ViewBag.QuantPaginas > 10 ? 10 : ViewBag.QuantPaginas); i++)
+                            {
+                                <li class="page-item"><a class="page-link" href="#">@i</a></li>
+                            }
+                            <li class="page-item next-page"><a class="page-link" href="#">Próximo</a></li>
+                            <li class="page-item last-page"><a class="page-link" href="#">Último</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-        </div>
         }
     </section>
 </div>

@@ -39,6 +39,27 @@ function obter_ordem_grid() {
     return ret;
 }
 
+function buscar_numero_pagina(botao) {
+    var texto_botao = botao.text();
+
+    if (!isNaN(texto_botao)) {
+        return texto_botao;
+    } else {
+        var pagina_atual = $('.active').text();
+
+        switch (texto_botao) {
+            case 'Primeiro':
+                return '1';
+            case 'Anterior':
+                return (parseInt(pagina_atual) - 1).toString();
+            case 'Próximo':
+                return (parseInt(pagina_atual) + 1).toString();
+            case 'Último':
+                return $('#qtd_paginas').val();
+        }
+    }
+}
+
 function add_anti_forgery_token(data) {
     data.__RequestVerificationToken = $('[name=__RequestVerificationToken]').val();
     return data;
@@ -90,6 +111,72 @@ function criar_linha_grid(dados, confirmar) {
     }
 
     return Mustache.render(template, dados);
+}
+
+function configurar_paginacao_grid(paginaAtual) {
+    var primeira_pagina_numerada = parseInt($('.page-item:not(.first-page, .prev-page, .next-page, .last-page)').first().text());
+    var ultima_pagina_numerada = parseInt($('.page-item:not(.first-page, .prev-page, .next-page, .last-page)').last().text());
+
+    //Página está dentro do range, não precisa alterar o componente de paginação
+    if (primeira_pagina_numerada <= paginaAtual && paginaAtual <= ultima_pagina_numerada) {
+        var button_pagina_ativar = $(`.page-item:contains(${paginaAtual})`).filter(function () { return $(this).text() === paginaAtual.toString() });
+        button_pagina_ativar.siblings().removeClass('active');
+        button_pagina_ativar.addClass('active');
+    } else {
+        //Remove todas as páginas, para refazer o componente
+        $('.page-item').remove();
+
+        $('.pagination').append('<li class="page-item disabled first-page" style="pointer-events: none;"><a class="page-link" href="#">Primeiro</a></li>');
+        $('.pagination').append('<li class="page-item disabled first-page" style="pointer-events: none;"><a class="page-link" href="#">Anterior</a></li>');
+
+        //Mover para frente
+        if (paginaAtual > ultima_pagina_numerada) {
+            for (var i = paginaAtual - 9; i <= paginaAtual; i++) {
+                $('.pagination').append(`<li class="page-item"><a class="page-link" href="#">${i}</a></li>`);
+            }
+        }
+
+        //Mover para trás
+        if (paginaAtual < primeira_pagina_numerada) {
+            for (var i = paginaAtual; i <= paginaAtual + 9; i++) {
+                $('.pagination').append(`<li class="page-item"><a class="page-link" href="#">${i}</a></li>`);
+            }
+        }
+
+        $('.pagination').append('<li class="page-item next-page"><a class="page-link" href="#">Próximo</a></li>');
+        $('.pagination').append('<li class="page-item last-page"><a class="page-link" href="#">Último</a></li>');
+
+        var button_pagina_ativar = $(`.page-item:contains(${paginaAtual})`).filter(function () { return $(this).text() === paginaAtual.toString() });
+        button_pagina_ativar.siblings().removeClass('active');
+        button_pagina_ativar.addClass('active');
+    }
+
+    if (paginaAtual === 1) {
+        desabilitar_botao('first-page');
+        desabilitar_botao('prev-page');
+    } else {
+        habilitar_botao('first-page');
+        habilitar_botao('prev-page');
+    }
+
+    var ultimaPagina = $('#qtd_paginas').val();
+    if (paginaAtual === parseInt(ultimaPagina)) {
+        desabilitar_botao('next-page');
+        desabilitar_botao('last-page');
+    } else {
+        habilitar_botao('next-page');
+        habilitar_botao('last-page');
+    }
+}
+
+function desabilitar_botao(idBotao) {
+    $(`.${idBotao}`).addClass('disabled');
+    $(`.${idBotao}`).css('pointer-events', 'none');
+}
+
+function habilitar_botao(idBotao) {
+    $(`.${idBotao}`).removeClass('disabled');
+    $(`.${idBotao}`).css('pointer-events', '');
 }
 
 function salvar_ok(response, param) {
@@ -250,7 +337,7 @@ $(document).on('click', '#btn_incluir', function () {
             btn = $(this),
             filtro = $('#txt_filtro'),
             tamPag = $('#ddl_tam_pag').val(),
-            pagina = btn.text(),
+            pagina = buscar_numero_pagina(btn),
             url = url_page_click,
             param = { 'pagina': pagina, 'tamPag': tamPag, 'filtro': filtro.val(), 'ordem': ordem };
 
@@ -272,8 +359,7 @@ $(document).on('click', '#btn_incluir', function () {
                     $('#mensagem_grid').removeClass('invisivel');
                 }
 
-                btn.siblings().removeClass('active');
-                btn.addClass('active');
+                configurar_paginacao_grid(parseInt(pagina));
             }
         })
             .fail(function () {
