@@ -18,11 +18,7 @@ namespace GerenciadorPalpites.Web.Models
         [Required(ErrorMessage = "Selecione o país.")]
         public int IdPais { get; set; }
 
-        [Required(ErrorMessage = "Selecione o estado.")]
-        public int IdEstado { get; set; }
-
-        [Required(ErrorMessage = "Selecione a cidade.")]
-        public int IdCidade { get; set; }
+        public string NomePais { get; set; }
 
         public bool Ativo { get; set; }
     }

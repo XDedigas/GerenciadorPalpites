@@ -12,6 +12,7 @@ namespace GerenciadorPalpites.Web.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public int IdPais { get; set; }
+        public string NomePais { get; set; }
         public virtual PaisModel Pais { get; set; }
         public int IdEstado { get; set; }
         public virtual EstadoModel Estado { get; set; }
@@ -44,7 +45,7 @@ namespace GerenciadorPalpites.Web.Models
                 var filtroWhere = "";
                 if (!string.IsNullOrEmpty(filtro))
                 {
-                    filtroWhere = string.Format(" where lower(nome) like '%{0}%'", filtro.ToLower());
+                    filtroWhere = string.Format(" where lower(Time.Nome) like '%{0}%'", filtro.ToLower());
                 }
 
                 var pos = (pagina - 1) * tamPagina;
@@ -55,10 +56,29 @@ namespace GerenciadorPalpites.Web.Models
                         pos > 0 ? pos - 1 : 0, tamPagina);
                 }
 
-                var sql =
-                    "select id, nome, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time" +
+                var sql = "";
+
+                if (!string.IsNullOrEmpty(ordem))
+                {
+                    if (ordem.ToLower().StartsWith("pais"))
+                    {
+                        sql = "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time inner join Pais on Time.idPais = Pais.id" +
+                              filtroWhere +
+                              $" order by Pais.Nome{ordem.ToLower().Replace("pais", "")}" +
+                              paginacao;
+                    }
+                    else
+                        sql =
+                    "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time inner join Pais on Time.idPais = Pais.id" +
                     filtroWhere +
-                    " order by " + (!string.IsNullOrEmpty(ordem) ? ordem : "nome") +
+                    $" order by Time.{ordem}" +
+                    paginacao;
+                }
+                else
+                    sql =
+                    "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time inner join Pais on Time.idPais = Pais.id" +
+                    filtroWhere +
+                    " order by nome" +
                     paginacao;
 
                 ret = db.Database.Connection.Query<TimeModel>(sql).ToList();

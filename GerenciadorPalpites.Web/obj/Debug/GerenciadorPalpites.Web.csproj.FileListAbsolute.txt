@@ -326,3 +326,7 @@ C:\Users\Matheus\Documents\github\GerenciadorPalpites\GerenciadorPalpites.Web\ob
 C:\Users\Matheus\Documents\github\GerenciadorPalpites\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.csproj.CopyComplete
 C:\Users\Matheus\Documents\github\GerenciadorPalpites\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.dll
 C:\Users\Matheus\Documents\github\GerenciadorPalpites\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.pdb
+C:\Users\Matheus\Documents\github\GerenciadorPalpites\GerenciadorPalpites.Web\bin\PagedList.dll
+C:\Users\Matheus\Documents\github\GerenciadorPalpites\GerenciadorPalpites.Web\bin\PagedList.Mvc.dll
+C:\Users\Matheus\Documents\github\GerenciadorPalpites\GerenciadorPalpites.Web\bin\PagedList.xml
+C:\Users\Matheus\Documents\github\GerenciadorPalpites\GerenciadorPalpites.Web\bin\PagedList.Mvc.xml
