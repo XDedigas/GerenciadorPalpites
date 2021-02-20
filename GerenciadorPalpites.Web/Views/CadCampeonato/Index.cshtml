@@ -1,78 +1,39 @@
-﻿@model List<GerenciadorPalpites.Web.Models.CampeonatoViewModel>
+﻿
+@model PagedList.IPagedList<GerenciadorPalpites.Web.Models.CampeonatoViewModel>
+@using PagedList.Mvc;
+
 @{
-    Layout = "~/Views/Shared/_Cadastro.cshtml";
+    Layout = "~/Views/Shared/_CadastroSemIncluir.cshtml";
+
     ViewBag.Title = "Campeonato";
     ViewBag.Lista = Model;
+    ViewBag.ControllerName = "CadCampeonato";
+    ViewBag.ActionName = "Index";
 }
+
 @section Styles {
-    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
     <link href="~/Content/Cadastro/Campeonato.css" rel="stylesheet" />
 }
-@section TituloGrid {
-    <th><span class="coluna-ordenacao" data-campo="nome">Nome</span></th>
-    <th><span class="coluna-ordenacao" data-campo="idEsporte">Esporte</span></th>
-    <th>Ação</th>
-}
-@section CamposCadastro {
-    <div class="row">
-        <div class="col-md-12">
-            @Html.Label("txt_nome", "Nome", new { @class = "control-label" })
-            @Html.TextBox("txt_nome", null, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            @Html.Label("ddl_esporte", "Esporte", new { @class = "control-label" })
-            @Html.DropDownList("ddl_esporte", new SelectList(ViewBag.Esportes, "Id", "Nome"), new { @class = "form-control" })
-        </div>
-    </div>
-}
-@section Scripts{
-    <script src="~/Scripts/bootstrap-select.js"></script>
-    <script>
-        var tituloPagina = '@ViewBag.Title';
-        var url_excluir = '@Url.Action("ExcluirCampeonato", "CadCampeonato")';
-        var url_confirmar = '@Url.Action("SalvarCampeonato", "CadCampeonato")';
-        var url_page_click = '@Url.Action("CampeonatoPagina", "CadCampeonato")';
-        var url_tam_pag_change = '@Url.Action("CampeonatoPagina", "CadCampeonato")';
-        var url_filtro_change = '@Url.Action("CampeonatoPagina", "CadCampeonato")';
-        var url_alterar = '@Url.Action("RecuperarCampeonato", "CadCampeonato")';
-        var linhas = [];
 
-        @{
-            var linha = 0;
-            foreach (var item in Model)
-            {
-                linha++;
-                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
-                {
-                    @:linhas.push(@Html.Raw(Json.Encode(item)));
-                                }
-                else
-                {
-                    break;
-                }
-            }
-        }
-    </script>
+@section TituloGrid {
+    <th>
+        @Html.ActionLink("Nome", "Index", new { ordenacao = ViewBag.NameSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "nome" })
+    </th>
+    <th>
+        @Html.ActionLink("Esporte", "Index", new { ordenacao = ViewBag.SportSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "esporte" })
+    </th>
+}
+
+@section Paginacao {
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }))
+}
+
+@section Scripts{
     <script id="template-grid-alterar" type="x-tmpl-mustache">
         <tr data-id="{{ Id }}">
             <td>{{ Nome }}</td>
-            <td>{{ Esporte.Nome }}</td>
-            <td>
-                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
-                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
-            </td>
-        </tr>
-    </script>
-    <script id="template-grid-confirmar" type="x-tmpl-mustache">
-        <tr data-id="{{ Id }}">
-            <td>{{ Nome }}</td>
             <td>{{ NomeEsporte }}</td>
-            <td>
-                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
-                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
-            </td>
         </tr>
     </script>
     <script src="~/Scripts/Cadastro/Campeonato.js"></script>

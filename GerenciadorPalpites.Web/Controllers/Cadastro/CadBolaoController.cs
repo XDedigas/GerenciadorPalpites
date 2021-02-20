@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GerenciadorPalpites.Web.Models;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,21 +19,35 @@ namespace GerenciadorPalpites.Web.Controllers
             return View(lista);
         }
 
-        public ActionResult MeusBoloes()
+        public ActionResult MeusBoloes(string ordenacao, string filtro, string termoPesquisa, string tamanhoPagina, int? page)
         {
-            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
-            ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
-            ViewBag.PaginaAtual = 1;
+            ViewBag.CurrentSort = ordenacao;
+            ViewBag.NameSortParam = string.IsNullOrEmpty(ordenacao) ? "nome desc" : "";
+            ViewBag.ChampionshipSortParam = ordenacao == "campeonato" ? "campeonato desc" : "campeonato";
 
-            var lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarListaMeusBoloes(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina, User.Identity.Name));
-            var quant = BolaoModel.RecuperarQuantidade();
+            //ComboBox para definir o tamanho das páginas
+            if (tamanhoPagina != null)
+                ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, int.Parse(tamanhoPagina));
+            else
+            {
+                ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
+                tamanhoPagina = _quantMaxLinhasPorPagina.ToString();
+            }
 
-            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
-            ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
+            ViewBag.CurrentPageSize = tamanhoPagina;
 
-            ViewBag.Campeonato = Mapper.Map<List<CampeonatoViewModel>>(CampeonatoModel.RecuperarLista(1, 9999));
+            if (termoPesquisa != null)
+                page = 1;
+            else
+                termoPesquisa = filtro;
 
-            return View(lista);
+            ViewBag.CurrentFilter = termoPesquisa;
+
+            List<BolaoViewModel> lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarListaMeusBoloes(User.Identity.Name, filtro: termoPesquisa, ordem: ordenacao));
+
+            int pageNumber = (page ?? 1);
+            //Retorna os registros paginados
+            return View(lista.ToPagedList(pageNumber, int.Parse(tamanhoPagina)));
         }
 
         public ActionResult Index()

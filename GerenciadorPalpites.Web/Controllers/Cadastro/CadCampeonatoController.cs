@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GerenciadorPalpites.Web.Models;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,35 @@ namespace GerenciadorPalpites.Web.Controllers
     {
         private const int _quantMaxLinhasPorPagina = 5;
 
-        public ActionResult Index()
+        public ActionResult Index(string ordenacao, string filtro, string termoPesquisa, string tamanhoPagina, int? page)
         {
-            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
-            ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
-            ViewBag.PaginaAtual = 1;
+            ViewBag.CurrentSort = ordenacao;
+            ViewBag.NameSortParam = string.IsNullOrEmpty(ordenacao) ? "nome desc" : "";
+            ViewBag.SportSortParam = ordenacao == "esporte" ? "esporte desc" : "esporte";
 
-            var lista = Mapper.Map<List<CampeonatoViewModel>>(CampeonatoModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina));
-            var quant = CampeonatoModel.RecuperarQuantidade();
+            //ComboBox para definir o tamanho das páginas
+            if (tamanhoPagina != null)
+                ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, int.Parse(tamanhoPagina));
+            else
+            {
+                ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
+                tamanhoPagina = _quantMaxLinhasPorPagina.ToString();
+            }
 
-            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
-            ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
-            ViewBag.Esportes = Mapper.Map<List<EsporteViewModel>>(EsporteModel.RecuperarLista());
+            ViewBag.CurrentPageSize = tamanhoPagina;
 
-            return View(lista);
+            if (termoPesquisa != null)
+                page = 1;
+            else
+                termoPesquisa = filtro;
+
+            ViewBag.CurrentFilter = termoPesquisa;
+
+            List<CampeonatoViewModel> lista = Mapper.Map<List<CampeonatoViewModel>>(CampeonatoModel.RecuperarLista(filtro: termoPesquisa, ordem: ordenacao));
+
+            int pageNumber = (page ?? 1);
+            //Retorna os registros paginados
+            return View(lista.ToPagedList(pageNumber, int.Parse(tamanhoPagina)));
         }
 
         [HttpPost]

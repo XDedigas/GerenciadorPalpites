@@ -13,6 +13,7 @@ namespace GerenciadorPalpites.Web.Models
         public int IdCampeonato { get; set; }
         public string Senha { get; set; }
         public bool Publico { get; set; }
+        public string NomeCampeonato { get; set; }
         public CampeonatoModel Campeonato { get; set; }
     }
 }

@@ -62,21 +62,21 @@ namespace GerenciadorPalpites.Web.Models
                 {
                     if (ordem.ToLower().StartsWith("pais"))
                     {
-                        sql = "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time inner join Pais on Time.idPais = Pais.id" +
+                        sql = "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time left join Pais on Time.idPais = Pais.id" +
                               filtroWhere +
                               $" order by Pais.Nome{ordem.ToLower().Replace("pais", "")}" +
                               paginacao;
                     }
                     else
                         sql =
-                    "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time inner join Pais on Time.idPais = Pais.id" +
+                    "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time left join Pais on Time.idPais = Pais.id" +
                     filtroWhere +
                     $" order by Time.{ordem}" +
                     paginacao;
                 }
                 else
                     sql =
-                    "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time inner join Pais on Time.idPais = Pais.id" +
+                    "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time left join Pais on Time.idPais = Pais.id" +
                     filtroWhere +
                     " order by nome" +
                     paginacao;

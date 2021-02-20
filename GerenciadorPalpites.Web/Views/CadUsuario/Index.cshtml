@@ -1,77 +1,37 @@
-﻿@model List<GerenciadorPalpites.Web.Models.UsuarioViewModel>
+﻿
+@model PagedList.IPagedList<GerenciadorPalpites.Web.Models.UsuarioViewModel>
+@using PagedList.Mvc;
+
 @{
-    Layout = "~/Views/Shared/_Cadastro.cshtml";
+    Layout = "~/Views/Shared/_CadastroSemIncluir.cshtml";
+
     ViewBag.Title = "Usuários";
     ViewBag.Lista = Model;
+    ViewBag.ControllerName = "CadUsuario";
+    ViewBag.ActionName = "Index";
 }
 
 @section Styles {
-    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
     <link href="~/Content/Cadastro/Usuario.css" rel="stylesheet" />
 }
 
 @section TituloGrid {
-    <th><span class="coluna-ordenacao" data-campo="nome">Nome</span></th>
-    <th><span class="coluna-ordenacao" data-campo="login">Login</span></th>
+    <th>
+        @Html.ActionLink("Nome", "Index", new { ordenacao = ViewBag.NameSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "nome" })
+    </th>
+    <th>
+        @Html.ActionLink("Login", "Index", new { ordenacao = ViewBag.LoginSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "login" })
+    </th>
     <th>Ação</th>
 }
 
-@section CamposCadastro {
-    <div class="row">
-        <div class="col-md-12">
-            @Html.Label("txt_nome", "Nome", new { @class = "control-label" })
-            @Html.TextBox("txt_nome", null, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            @Html.Label("txt_email", "E-mail", new { @class = "control-label" })
-            @Html.TextBox("txt_email", null, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            @Html.Label("txt_login", "Login", new { @class = "control-label" })
-            @Html.TextBox("txt_login", null, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            @Html.Label("txt_senha", "Senha", new { @class = "control-label" })
-            @Html.TextBox("txt_senha", null, new { @class = "form-control", type = "password" })
-        </div>
-    </div>
+@section Paginacao {
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }))
 }
 
 @section Scripts{
-    <script src="~/Scripts/bootstrap-select.js"></script>
-    <script>
-        var tituloPagina = '@ViewBag.Title';
-        var url_excluir = '@Url.Action("ExcluirUsuario", "CadUsuario")';
-        var url_confirmar = '@Url.Action("SalvarUsuario", "CadUsuario")';
-        var url_page_click = '@Url.Action("UsuarioPagina", "CadUsuario")';
-        var url_tam_pag_change = '@Url.Action("UsuarioPagina", "CadUsuario")';
-        var url_filtro_change = '@Url.Action("UsuarioPagina", "CadUsuario")';
-        var url_alterar = '@Url.Action("RecuperarUsuario", "CadUsuario")';
-        var linhas = [];
-
-        @{
-            var linha = 0;
-            foreach (var item in Model)
-            {
-                linha++;
-                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
-                {
-                    @:linhas.push(@Html.Raw(Json.Encode(item)));
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
-    </script>
-    <script id="template-grid" type="x-tmpl-mustache">
+    <script id="template-grid-alterar" type="x-tmpl-mustache">
         <tr data-id="{{ Id }}">
             <td>{{ Nome }}</td>
             <td>{{ Login }}</td>

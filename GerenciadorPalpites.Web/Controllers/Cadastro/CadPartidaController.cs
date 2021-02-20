@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using GerenciadorPalpites.Web.Models;
+using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -14,23 +16,42 @@ namespace GerenciadorPalpites.Web.Controllers
     {
         private const int _quantMaxLinhasPorPagina = 5;
 
-        public ActionResult Index()
+        public ActionResult Index(string ordenacao, string filtro, string termoPesquisa, string tamanhoPagina, int? page)
         {
-            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
-            ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
-            ViewBag.PaginaAtual = 1;
+            ViewBag.CurrentSort = ordenacao;
+            ViewBag.DateSort = string.IsNullOrEmpty(ordenacao) ? "data desc" : "";
+            ViewBag.HomeTeamSort = ordenacao == "timeCasa" ? "timeCasa desc" : "timeCasa";
+            ViewBag.HomeScoreSort = ordenacao == "placarTimeCasa" ? "placarTimeCasa desc" : "placarTimeCasa";
+            ViewBag.AwayTeamSort = ordenacao == "timeFora" ? "timeFora desc" : "timeFora";
+            ViewBag.AwayScoreSort = ordenacao == "placarTimeFora" ? "placarTimeFora desc" : "placarTimeFora";
+            ViewBag.ChampionshipSort = ordenacao == "campeonato" ? "campeonato desc" : "campeonato";
 
-            var lista = Mapper.Map<List<PartidaViewModel>>(PartidaModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina));
-            var quant = PartidaModel.RecuperarQuantidade();
+            //ComboBox para definir o tamanho das páginas
+            if (tamanhoPagina != null)
+                ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, int.Parse(tamanhoPagina));
+            else
+            {
+                ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
+                tamanhoPagina = _quantMaxLinhasPorPagina.ToString();
+            }
 
-            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
-            ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
-            ViewBag.Bolao = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(1, 9999));
-            ViewBag.Esporte = Mapper.Map<List<EsporteViewModel>>(EsporteModel.RecuperarLista(1, 9999));
-            ViewBag.Time = Mapper.Map<List<TimeViewModel>>(TimeModel.RecuperarLista());
-            ViewBag.Campeonato = Mapper.Map<List<CampeonatoViewModel>>(CampeonatoModel.RecuperarLista(1, 9999));
+            ViewBag.CurrentPageSize = tamanhoPagina;
 
-            return View(lista);
+            if (termoPesquisa != null)
+                page = 1;
+            else
+                termoPesquisa = filtro;
+
+            ViewBag.CurrentFilter = termoPesquisa;
+
+            List<PartidaViewModel> lista = Mapper.Map<List<PartidaViewModel>>(PartidaModel.RecuperarLista(filtro: termoPesquisa, ordem: ordenacao));
+
+            foreach (var item in lista)
+                item.DataFormatada = item.Data.ToString(new CultureInfo("pt-BR"));
+
+            int pageNumber = (page ?? 1);
+            //Retorna os registros paginados
+            return View(lista.ToPagedList(pageNumber, int.Parse(tamanhoPagina)));
         }
 
         [HttpPost]

@@ -10,6 +10,7 @@ namespace GerenciadorPalpites.Web.Models
         public string Nome { get; set; }
         [Required(ErrorMessage = "Preencha o esporte.")]
         public int IdEsporte { get; set; }
+        public string NomeEsporte { get; set; }
         public EsporteModel Esporte { get; set; }
     }
 }

@@ -12,9 +12,13 @@ namespace GerenciadorPalpites.Web.Models
 
         public int Id { get; set; }
         public int IdTimeCasa { get; set; }
+        public string NomeTimeCasa { get; set; }
         public int IdTimeFora { get; set; }
+        public string NomeTimeFora { get; set; }
+        public string NomeCampeonato { get; set; }
         public int IdCampeonato { get; set; }
         public DateTime Data { get; set; }
+        public string DataFormatada { get; set; }
         public virtual CampeonatoModel Campeonato { get; set; }
         public virtual TimeModel TimeCasa { get; set; }
         public virtual TimeModel TimeFora { get; set; }
@@ -45,8 +49,10 @@ namespace GerenciadorPalpites.Web.Models
             {
                 var filtroWhere = "";
                 if (!string.IsNullOrEmpty(filtro))
-                    filtroWhere = string.Format("where (lower(a.nome) like '%{0}%' or (lower(b.nome) like '%{0}%') ", filtro.ToLower());
-                
+                {
+                    filtroWhere = $" where lower(timeCasa.Nome) like '%{filtro.ToLower()}%' or lower(timeFora.Nome) like '%{filtro.ToLower()}%' or lower(c.Nome) like '%{filtro.ToLower()}%'";
+                }
+
                 var pos = (pagina - 1) * tamPagina;
                 var paginacao = "";
                 if (pagina > 0 && tamPagina > 0)
@@ -55,9 +61,68 @@ namespace GerenciadorPalpites.Web.Models
                         pos > 0 ? pos - 1 : 0, tamPagina);
                 }
 
-                var sql =
-                    "select partida.*,a.* from partida left join Campeonato a on(a.id = Partida.idCampeonato) " + filtroWhere + "order by " + (!string.IsNullOrEmpty(ordem) ? ordem : "a.nome") +
-                    paginacao;
+                var sql = "";
+                if (!string.IsNullOrEmpty(ordem))
+                {
+                    if (ordem.StartsWith("timeCasa"))
+                    {
+                        sql =
+                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        " from Partida p" +
+                        " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
+                        " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
+                        " left join Campeonato c on (p.idCampeonato = c.id)" +
+                        filtroWhere +
+                        $" order by timeCasa.nome{ordem.ToLower().Replace("timecasa", "")}" +
+                        paginacao;
+                    }
+                    else if (ordem.StartsWith("timeFora"))
+                    {
+                        sql =
+                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        " from Partida p" +
+                        " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
+                        " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
+                        " left join Campeonato c on (p.idCampeonato = c.id)" +
+                        filtroWhere +
+                        $" order by timeFora.nome{ordem.ToLower().Replace("timefora", "")}" +
+                        paginacao;
+                    }
+                    else if (ordem.StartsWith("campeonato"))
+                    {
+                        sql =
+                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        " from Partida p" +
+                        " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
+                        " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
+                        " left join Campeonato c on (p.idCampeonato = c.id)" +
+                        filtroWhere +
+                        $" order by c.nome{ordem.ToLower().Replace("campeonato", "")}" +
+                        paginacao;
+                    }
+                    else
+                    {
+                        sql =
+                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        " from Partida p" +
+                        " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
+                        " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
+                        " left join Campeonato c on (p.idCampeonato = c.id)" +
+                        filtroWhere +
+                        $" order by p.{ordem}" +
+                        paginacao;
+                    }
+                }
+                else
+                    sql =
+                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        " from Partida p" +
+                        " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
+                        " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
+                        " left join Campeonato c on (p.idCampeonato = c.id)" +
+                        filtroWhere +
+                        " order by p.data" +
+                        paginacao;
 
                 ret = db.Database.Connection.Query<PartidaModel>(sql).ToList();
             }

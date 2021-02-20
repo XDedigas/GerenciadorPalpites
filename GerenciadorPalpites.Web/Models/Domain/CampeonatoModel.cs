@@ -11,6 +11,7 @@ namespace GerenciadorPalpites.Web.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public int IdEsporte { get; set; }
+        public string NomeEsporte { get; set; }
         public virtual EsporteModel Esporte { get; set; }
         #endregion
 
@@ -36,7 +37,7 @@ namespace GerenciadorPalpites.Web.Models
                 var filtroWhere = "";
                 if (!string.IsNullOrEmpty(filtro))
                 {
-                    filtroWhere = $" where lower(c.Nome) like '%{filtro.ToLower()}%'";
+                    filtroWhere = $" where lower(c.Nome) like '%{filtro.ToLower()}%' or lower(e.Nome) like '%{filtro.ToLower()}%'";
                 }
 
                 if (idEsporte > 0)
@@ -52,14 +53,34 @@ namespace GerenciadorPalpites.Web.Models
                     paginacao = $" offset {(pos > 0 ? pos - 1 : 0)} rows fetch next {tamPagina} rows only";
                 }
 
-                var sql = $"select c.id as id, c.Nome as Nome, c.idEsporte as idEsporte from campeonato c{filtroWhere} order by {(!string.IsNullOrEmpty(ordem) ? ordem : "c.Nome")}{paginacao}";
+                var sql = "";
+                if (!string.IsNullOrEmpty(ordem))
+                {
+                    if (ordem.StartsWith("esporte"))
+                    {
+                        sql =
+                        "select c.id as id, c.Nome as Nome, c.idEsporte as idEsporte, e.Nome as NomeEsporte from campeonato c left join esporte e on c.idEsporte = e.id" +
+                        filtroWhere +
+                        $" order by e.nome{ordem.ToLower().Replace("esporte", "")}" +
+                        paginacao;
+                    }
+                    else
+                    {
+                        sql =
+                        "select c.id as id, c.Nome as Nome, c.idEsporte as idEsporte, e.Nome as NomeEsporte from campeonato c left join esporte e on c.idEsporte = e.id" +
+                        filtroWhere +
+                        $" order by c.{ordem}" +
+                        paginacao;
+                    }
+                }
+                else
+                    sql =
+                        "select c.id as id, c.Nome as Nome, c.idEsporte as idEsporte, e.Nome as NomeEsporte from campeonato c left join esporte e on c.idEsporte = e.id" + 
+                        filtroWhere + 
+                        " order by c.nome" + 
+                        paginacao;
 
                 ret = db.Database.Connection.Query<CampeonatoModel>(sql).ToList();
-
-                foreach (var item in ret)
-                {
-                    item.Esporte = EsporteModel.RecuperarPeloId(item.IdEsporte);
-                }
             }
 
             return ret;

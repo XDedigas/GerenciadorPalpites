@@ -57,30 +57,23 @@ namespace GerenciadorPalpites.Web.Models
                 var filtroWhere = "";
                 if (!string.IsNullOrEmpty(filtro))
                 {
-                    filtroWhere = string.Format(" where lower(nome) like '%{0}%'", filtro.ToLower());
+                    filtroWhere = string.Format(" where lower(nome) like '%{0}%' or lower(login) like '%{0}%'", filtro.ToLower());
                 }
 
-                string sql;
-                if (pagina == -1 || tamPagina == -1)
+                var pos = (pagina - 1) * tamPagina;
+                var paginacao = "";
+                if (pagina > 0 && tamPagina > 0)
                 {
-                    sql =
-                        "select *" +
-                        "from usuario" +
-                        filtroWhere +
-                        " order by " + (!string.IsNullOrEmpty(ordem) ? ordem : "nome");
-                }
-                else
-                {
-                    var pos = (pagina - 1) * tamPagina;
-                    sql = string.Format(
-                        "select *" +
-                        " from usuario" +
-                        filtroWhere +
-                        " order by " + (!string.IsNullOrEmpty(ordem) ? ordem : "nome") +
-                        " offset {0} rows fetch next {1} rows only",
+                    paginacao = string.Format(" offset {0} rows fetch next {1} rows only",
                         pos > 0 ? pos - 1 : 0, tamPagina);
                 }
 
+                var sql = 
+                    "select * from usuario" +
+                    filtroWhere +
+                    $" order by {(string.IsNullOrEmpty(ordem) ? "nome" : ordem)}" +
+                    paginacao;
+                    
                 ret = db.Database.Connection.Query<UsuarioModel>(sql).ToList();
             }
 

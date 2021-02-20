@@ -1,99 +1,39 @@
 ﻿
 @model PagedList.IPagedList<GerenciadorPalpites.Web.Models.TimeViewModel>
 @using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_CadastroSemIncluir.cshtml";
 
     ViewBag.Title = "Cadastro de Times";
     ViewBag.Lista = Model;
+    ViewBag.ControllerName = "CadTime";
+    ViewBag.ActionName = "Index";
 }
 
-<link href="~/Content/bootstrap-select.css" rel="stylesheet" />
-<link href="~/Content/Cadastro/Time.css" rel="stylesheet" />
-<style>
+@section Styles {
+    <link href="~/Content/Cadastro/Time.css" rel="stylesheet" />
+}
 
-    .coluna-grid {
-        color: black;
-        text-decoration: none;
-    }
+@section TituloGrid {
+    <th>
+        @Html.ActionLink("Nome", "Index", new { ordenacao = ViewBag.NameSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "nome" })
+    </th>
+    <th>
+        @Html.ActionLink("País", "Index", new { ordenacao = ViewBag.CountrySortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "pais" })
+    </th>
+    <th>
+        @Html.ActionLink("Ativo", "Index", new { ordenacao = ViewBag.ActiveSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "ativo" })
+    </th>
+    <th>Ação</th>
+}
 
-        .coluna-grid:hover, .coluna-grid:focus {
-            color: black;
-            text-decoration: none;
-        }
-</style>
-
-<div id="cadastro">
-    <section id="cadastro_cabecalho">
-        <h1>@ViewBag.Title</h1>
-    </section>
-    <section id="cadastro_conteudo">
-        <div id="cabecalho_grid" class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-4">
-                        @using (Html.BeginForm("Index", "CadTime", FormMethod.Get, new { @name = "FormTamPag" }))
-                        {
-                            @Html.DropDownList("ddl_tam_pag", (SelectList)ViewBag.ListaTamPag, new { @class = "selectpicker", @onchange = "tamanhoPaginaChanged()" })
-                            @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string, new { @id = "hiddenTamanhoPagina" });
-                            @Html.Hidden("ordenacao", ViewBag.CurrentSort as string);
-                            @Html.Hidden("filtro", ViewBag.CurrentFilter as string);
-                        }
-                    </div>
-                    <div class="col-md-8">
-                        @using (Html.BeginForm("Index", "CadTime", FormMethod.Get))
-                        {
-                            @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string);
-                            <div class="row">
-                                <div class="col-md-9">
-                                    @Html.TextBox("termoPesquisa", ViewBag.CurrentFilter as string, new { @class = "form-control", placeholder = "Informe um filtro..." })
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-search"></i> Pesquisar</button>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <table id="grid_cadastro" class="table table-bordered table-striped table-hover @Html.Raw(ViewBag.Lista == null || ViewBag.Lista.Count == 0 ? "invisivel" : "")">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.ActionLink("Nome", "Index", new { ordenacao = ViewBag.NameSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "nome" })
-                            </th>
-                            <th>
-                                @Html.ActionLink("País", "Index", new { ordenacao = ViewBag.CountrySortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "pais" })
-                            </th>
-                            <th>
-                                @Html.ActionLink("Ativo", "Index", new { ordenacao = ViewBag.ActiveSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "ativo" })
-                            </th>
-                            <th>Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <div id="mensagem_grid" @Html.Raw(ViewBag.Lista != null && ViewBag.Lista.Count > 0 ? "class=\"invisivel\"" : "")>
-                    Nenhum registro em @ViewBag.Title
-                </div>
-            </div>
-        </div>
-        <br />
-        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }))
-    </section>
-</div>
+@section Paginacao {
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }))
+}
 
 @section Scripts {
-    <script src="~/Scripts/mustache.min.js"></script>
-    <script src="~/Scripts/bootstrap-select.js"></script>
-    <script src="~/Scripts/jquery.mask.min.js"></script>
     <script id="template-grid-alterar" type="x-tmpl-mustache">
         <tr data-id="{{ Id }}">
             <td>{{ Nome }}</td>
@@ -104,83 +44,4 @@
             </td>
         </tr>
     </script>
-
-    <script>
-        var tituloPagina = '@ViewBag.Title';
-        var url_excluir = '@Url.Action("ExcluirTime", "CadTime")';
-        var url_confirmar = '@Url.Action("SalvarTime", "CadTime")';
-        var url_page_click = '@Url.Action("TimePagina", "CadTime")';
-        var url_tam_pag_change = '@Url.Action("TimePagina", "CadTime")';
-        var url_filtro_change = '@Url.Action("TimePagina", "CadTime")';
-        var url_alterar = '@Url.Action("RecuperarTime", "CadTime")';
-        var url_listar_estados = '@Url.Action("RecuperarEstadosDoPais", "CadEstado")';
-        var url_listar_cidades = '@Url.Action("RecuperarCidadesDoEstado", "CadCidade")';
-        var linhas = [];
-
-        @{
-            var linha = 0;
-            foreach (var item in Model)
-            {
-                linha++;
-                @:linhas.push(@Html.Raw(Json.Encode(item)));
-            }
-        }
-
-        $(document).ready(function () {
-            var grid = $('#grid_cadastro > tbody');
-            for (var i = 0; i < linhas.length; i++) {
-                grid.append(criar_linha_grid(linhas[i]));
-            }
-
-            marcar_ordenacao_campo();
-        });
-
-        function criar_linha_grid(dados, confirmar) {
-            var template = null;
-            if (confirmar != null) {
-                template = $('#template-grid-confirmar').html();
-            } else {
-                template = $('#template-grid-alterar').html();
-            }
-
-            return Mustache.render(template, dados);
-        }
-
-        function marcar_ordenacao_campo() {
-            const url = window.location.href;
-
-            //Verifica se a URL tem query string
-            if (url.indexOf('?') > 0) {
-                const urlQuery = url.substring(url.indexOf('?') + 1);
-                const queryParams = urlQuery.split('&');
-                const orderParam = queryParams.find(parameter => parameter.startsWith('ordenacao'));
-
-                if (orderParam) {
-                    const [name, order] = orderParam.substring(orderParam.indexOf('=') + 1).split('%20');
-                    const gridColumn = $(`a[data-column-sort="${name}"]`);
-
-                    if (gridColumn) {
-                        if (order) {
-                            gridColumn.append('&nbsp;<i class="glyphicon glyphicon-arrow-up" style="color: #000000"></i>');
-                        } else {
-                            gridColumn.append('&nbsp;<i class="glyphicon glyphicon-arrow-down" style="color: #000000"></i>');
-                        }
-                    }
-                } else {
-                    const firstColumn = $('#grid_cadastro thead tr th:nth-child(1) a');
-                    firstColumn.append('&nbsp;<i class="glyphicon glyphicon-arrow-down" style="color: #000000"></i>');
-                }
-            } else {
-                const firstColumn = $('#grid_cadastro thead tr th:nth-child(1) a');
-                firstColumn.append('&nbsp;<i class="glyphicon glyphicon-arrow-down" style="color: #000000"></i>');
-            }
-        }
-
-        function tamanhoPaginaChanged() {
-            $('#hiddenTamanhoPagina').val($('#ddl_tam_pag').val());
-            document.forms['FormTamPag'].submit();
-        }
-
-    </script>
-    <script src="~/Scripts/Cadastro/Time.js"></script>
 }

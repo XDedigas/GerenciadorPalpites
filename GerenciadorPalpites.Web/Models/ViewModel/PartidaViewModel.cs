@@ -9,12 +9,15 @@ namespace GerenciadorPalpites.Web.Models
 
         [Required(ErrorMessage = "Selecione o Time da Casa.")]
         public int TimeCasa { get; set; }
+        public string NomeTimeCasa { get; set; }
 
         [Required(ErrorMessage = "Selecione o Time de Fora.")]
         public int TimeFora { get; set; }
+        public string NomeTimeFora { get; set; }
 
         [Required(ErrorMessage = "Preencha a Data.")]
         public DateTime Data { get; set; }
+        public string DataFormatada { get; set; }
 
         [Required(ErrorMessage = "Preencha o placar do time da casa.")]
         public int PlacarTimeCasa { get; set; }
@@ -24,5 +27,6 @@ namespace GerenciadorPalpites.Web.Models
 
         [Required(ErrorMessage = "Selecione o Campeonato.")]
         public int IdCampeonato { get; set; }
+        public string NomeCampeonato { get; set; }
     }
 }

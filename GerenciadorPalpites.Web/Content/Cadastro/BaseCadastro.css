@@ -1,0 +1,9 @@
+﻿.coluna-grid {
+    color: black;
+    text-decoration: none;
+}
+
+.coluna-grid:hover, .coluna-grid:focus {
+    color: black;
+    text-decoration: none;
+}

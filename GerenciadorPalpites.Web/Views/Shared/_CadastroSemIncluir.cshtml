@@ -5,6 +5,10 @@
     var titulo = ViewBag.Title;
 }
 
+<link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/Cadastro/BaseCadastro.css" rel="stylesheet" />
+
 @RenderSection("Styles", true)
 @RenderBody()
 
@@ -17,11 +21,27 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-4">
-
-                        @Html.DropDownList("ddl_tam_pag", (SelectList)ViewBag.ListaTamPag, new { @class = "selectpicker" })
+                        @using (Html.BeginForm(ViewBag.ActionName as string, ViewBag.ControllerName as string, FormMethod.Get, new { @name = "FormTamPag" }))
+                        {
+                            @Html.DropDownList("ddl_tam_pag", (SelectList)ViewBag.ListaTamPag, new { @class = "selectpicker", @onchange = "tamanhoPaginaChanged()" })
+                            @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string, new { @id = "hiddenTamanhoPagina" });
+                            @Html.Hidden("ordenacao", ViewBag.CurrentSort as string);
+                            @Html.Hidden("filtro", ViewBag.CurrentFilter as string);
+                        }
                     </div>
                     <div class="col-md-8">
-                        @Html.TextBox("txt_filtro", null, new { @class = "form-control" })
+                        @using (Html.BeginForm(ViewBag.ActionName as string, ViewBag.ControllerName as string, FormMethod.Get))
+                        {
+                            @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string);
+                            <div class="row">
+                                <div class="col-md-9">
+                                    @Html.TextBox("termoPesquisa", ViewBag.CurrentFilter as string, new { @class = "form-control", placeholder = "Informe um filtro..." })
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-search"></i> Pesquisar</button>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -42,35 +62,14 @@
                 </div>
             </div>
         </div>
-        @if (ViewBag.QuantPaginas > 1)
-        {
-            @Html.Hidden("qtd_paginas", (string)ViewBag.QuantPaginas.ToString())
-            <div class="row">
-                <div class="col-md-12">
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item disabled first-page" style="pointer-events: none;"><a class="page-link" href="#">Primeiro</a></li>
-                            <li class="page-item disabled prev-page" style="pointer-events: none;"><a class="page-link" href="#">Anterior</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            @for (int i = 2; i <= (ViewBag.QuantPaginas > 10 ? 10 : ViewBag.QuantPaginas); i++)
-                            {
-                                <li class="page-item"><a class="page-link" href="#">@i</a></li>
-                            }
-                            <li class="page-item next-page"><a class="page-link" href="#">Próximo</a></li>
-                            <li class="page-item last-page"><a class="page-link" href="#">Último</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        }
+        <br />
+        @RenderSection("Paginacao", true)
     </section>
 </div>
 @Html.Hidden("id_cadastro")
 <div id="modal_cadastro" class="invisivel" role="dialog">
     <div id="msg_mensagem_aviso" class="text-danger invisivel"></div>
     <fieldset>
-        @Html.AntiForgeryToken()
-        @RenderSection("CamposCadastro", true)
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -85,8 +84,21 @@
         </div>
     </fieldset>
 </div>
+
 @section Scripts{
     <script src="~/Scripts/mustache.min.js"></script>
-    <script src="~/Scripts/Cadastro/CadBase.js"></script>
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script src="~/Scripts/Cadastro/BaseCadastro.js"></script>
     @RenderSection("Scripts", true)
+
+    <script>
+        var linhas = [];
+        @{
+            foreach (var item in Model)
+            {
+                @:linhas.push(@Html.Raw(Json.Encode(item)));
+            }
+        }
+    </script>
 }
