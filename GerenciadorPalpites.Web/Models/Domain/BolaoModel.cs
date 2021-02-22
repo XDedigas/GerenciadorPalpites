@@ -30,7 +30,7 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
-        public static List<BolaoModel> RecuperarLista(int pagina, int tamPagina, string filtro = "", string ordem = "")
+        public static List<BolaoModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "")
         {
             var ret = new List<BolaoModel>();
 
@@ -39,20 +39,49 @@ namespace GerenciadorPalpites.Web.Models
                 var filtroWhere = "";
                 if (!string.IsNullOrEmpty(filtro))
                 {
-                    filtroWhere = $" where lower(b.nome) like '%{filtro.ToLower()}%'";
+                    filtroWhere = $" where lower(b.nome) like '%{filtro.ToLower()}%' or lower(c.nome) like '%{filtro.ToLower()}%'";
                 }
 
                 var pos = (pagina - 1) * tamPagina;
+                var paginacao = "";
+                if (pagina > 0 && tamPagina > 0)
+                {
+                    paginacao = string.Format(" offset {0} rows fetch next {1} rows only",
+                        pos > 0 ? pos - 1 : 0, tamPagina);
+                }
 
-                var sql = $"select b.Id as id,b.Nome as Nome, b.idCampeonato as idCampeonato, b.Senha as Senha, b.Publico as Publico " +
-                    $"from bolao b{filtroWhere} order by {(!string.IsNullOrEmpty(ordem) ? ordem : "b.Nome")} offset {(pos > 0 ? pos - 1 : 0)} rows fetch next {tamPagina} rows only";
+                var sql = "";
+
+                if (!string.IsNullOrEmpty(ordem))
+                {
+                    if (ordem.ToLower().StartsWith("campeonato"))
+                    {
+                        sql =
+                            "select b.id as id, b.Nome as Nome, b.idCampeonato as idCampeonato, b.Senha as Senha, b.Publico as Publico, c.Nome as NomeCampeonato" +
+                            " from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
+                            filtroWhere +
+                            $" order by c.nome{ordem.ToLower().Replace("campeonato", "")}" +
+                            paginacao;
+                    }
+                    else
+                    {
+                        sql =
+                            "select b.id as id, b.Nome as Nome, b.idCampeonato as idCampeonato, b.Senha as Senha, b.Publico as Publico, c.Nome as NomeCampeonato" +
+                            " from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
+                            filtroWhere +
+                            $" order by b.{ordem}" +
+                            paginacao;
+                    }
+                }
+                else
+                    sql =
+                            "select b.id as id, b.Nome as Nome, b.idCampeonato as idCampeonato, b.Senha as Senha, b.Publico as Publico, c.Nome as NomeCampeonato" +
+                            " from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
+                            filtroWhere +
+                            $" order by b.nome" +
+                            paginacao;
 
                 ret = db.Database.Connection.Query<BolaoModel>(sql).ToList();
-
-                foreach (var item in ret)
-                {
-                    item.Campeonato = CampeonatoModel.RecuperarPeloId(item.IdCampeonato);
-                }
             }
 
             return ret;
