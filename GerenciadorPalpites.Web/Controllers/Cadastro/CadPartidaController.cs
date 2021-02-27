@@ -16,8 +16,9 @@ namespace GerenciadorPalpites.Web.Controllers
     {
         private const int _quantMaxLinhasPorPagina = 5;
 
-        public ActionResult Index(string ordenacao, string filtro, string termoPesquisa, string tamanhoPagina, int? page)
+        public ActionResult Index(string ordenacao, string filtro, string termoPesquisa, string tamanhoPagina, int? page, string time, string campeonato)
         {
+            #region Ordenações
             ViewBag.CurrentSort = ordenacao;
             ViewBag.DateSort = string.IsNullOrEmpty(ordenacao) ? "data desc" : "";
             ViewBag.HomeTeamSort = ordenacao == "timeCasa" ? "timeCasa desc" : "timeCasa";
@@ -25,7 +26,21 @@ namespace GerenciadorPalpites.Web.Controllers
             ViewBag.AwayTeamSort = ordenacao == "timeFora" ? "timeFora desc" : "timeFora";
             ViewBag.AwayScoreSort = ordenacao == "placarTimeFora" ? "placarTimeFora desc" : "placarTimeFora";
             ViewBag.ChampionshipSort = ordenacao == "campeonato" ? "campeonato desc" : "campeonato";
+            #endregion
 
+            var idTime = !string.IsNullOrEmpty(time) ? int.Parse(time) : -1;
+            var times = TimeModel.RecuperarLista();
+            times.Insert(0, new TimeModel { Id = -1, Nome = "Informe o time..." });
+            ViewBag.ListaTimes = new SelectList(times, "Id", "Nome", idTime.ToString());
+            ViewBag.CurrentTeam = idTime.ToString();
+
+            var idCampeonato = !string.IsNullOrEmpty(campeonato) ? int.Parse(campeonato) : -1;
+            var campeonatos = CampeonatoModel.RecuperarLista();
+            campeonatos.Insert(0, new CampeonatoModel { Id = -1, Nome = "Informe o campeonato..." });
+            ViewBag.ListaCampeonatos = new SelectList(campeonatos, "Id", "Nome", idCampeonato.ToString());
+            ViewBag.CurrentChampionship = idCampeonato.ToString();
+
+            #region ComboBox - Tamanho da página
             //ComboBox para definir o tamanho das páginas
             if (tamanhoPagina != null)
                 ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, int.Parse(tamanhoPagina));
@@ -36,6 +51,7 @@ namespace GerenciadorPalpites.Web.Controllers
             }
 
             ViewBag.CurrentPageSize = tamanhoPagina;
+            #endregion
 
             if (termoPesquisa != null)
                 page = 1;
@@ -44,7 +60,7 @@ namespace GerenciadorPalpites.Web.Controllers
 
             ViewBag.CurrentFilter = termoPesquisa;
 
-            List<PartidaViewModel> lista = Mapper.Map<List<PartidaViewModel>>(PartidaModel.RecuperarLista(filtro: termoPesquisa, ordem: ordenacao));
+            List<PartidaViewModel> lista = Mapper.Map<List<PartidaViewModel>>(PartidaModel.RecuperarLista(filtro: termoPesquisa, ordem: ordenacao, idTime: idTime, idCampeonato: idCampeonato));
 
             foreach (var item in lista)
                 item.DataFormatada = item.Data.ToString(new CultureInfo("pt-BR"));

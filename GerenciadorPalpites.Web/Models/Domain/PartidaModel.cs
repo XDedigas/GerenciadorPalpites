@@ -41,7 +41,7 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
-        public static List<PartidaModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "", bool somenteAtivos = false)
+        public static List<PartidaModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "", bool somenteAtivos = false, long idTime = -1, long idCampeonato = -1)
         {
             var ret = new List<PartidaModel>();
 
@@ -50,7 +50,34 @@ namespace GerenciadorPalpites.Web.Models
                 var filtroWhere = "";
                 if (!string.IsNullOrEmpty(filtro))
                 {
-                    filtroWhere = $" where lower(timeCasa.Nome) like '%{filtro.ToLower()}%' or lower(timeFora.Nome) like '%{filtro.ToLower()}%' or lower(c.Nome) like '%{filtro.ToLower()}%'";
+                    filtroWhere = $" where (lower(timeCasa.Nome) like '%{filtro.ToLower()}%' or lower(timeFora.Nome) like '%{filtro.ToLower()}%' or lower(c.Nome) like '%{filtro.ToLower()}%')";
+                    if (idTime > 0 && idCampeonato > 0)
+                    {
+                        filtroWhere += $" and (timeCasa.id = {idTime} or timeFora.id = {idTime}) and c.id = {idCampeonato}";
+                    }
+                    else if (idTime > 0)
+                    {
+                        filtroWhere += $" and (timeCasa.id = {idTime} or timeFora.id = {idTime})";
+                    }
+                    else if (idCampeonato > 0)
+                    {
+                        filtroWhere += $" and c.id = {idCampeonato}";
+                    }
+                }
+                else
+                {
+                    if (idTime > 0 && idCampeonato > 0)
+                    {
+                        filtroWhere += $" where (timeCasa.id = {idTime} or timeFora.id = {idTime}) and c.id = {idCampeonato}";
+                    }
+                    else if (idTime > 0)
+                    {
+                        filtroWhere += $" where (timeCasa.id = {idTime} or timeFora.id = {idTime})";
+                    }
+                    else if (idCampeonato > 0)
+                    {
+                        filtroWhere += $" where c.id = {idCampeonato}";
+                    }
                 }
 
                 var pos = (pagina - 1) * tamPagina;
@@ -67,7 +94,7 @@ namespace GerenciadorPalpites.Web.Models
                     if (ordem.StartsWith("timeCasa"))
                     {
                         sql =
-                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        "select top 1000 p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
                         " from Partida p" +
                         " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
                         " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
@@ -79,7 +106,7 @@ namespace GerenciadorPalpites.Web.Models
                     else if (ordem.StartsWith("timeFora"))
                     {
                         sql =
-                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        "select top 1000 p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
                         " from Partida p" +
                         " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
                         " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
@@ -91,7 +118,7 @@ namespace GerenciadorPalpites.Web.Models
                     else if (ordem.StartsWith("campeonato"))
                     {
                         sql =
-                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        "select top 1000 p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
                         " from Partida p" +
                         " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
                         " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
@@ -103,7 +130,7 @@ namespace GerenciadorPalpites.Web.Models
                     else
                     {
                         sql =
-                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        "select top 1000 p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
                         " from Partida p" +
                         " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
                         " left join Time timeFora on (p.idTimeFora = timeFora.id)" +
@@ -115,7 +142,7 @@ namespace GerenciadorPalpites.Web.Models
                 }
                 else
                     sql =
-                        "select p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
+                        "select top 1000 p.id as Id, p.data as Data, p.idTimeCasa as IdTimeCasa, timeCasa.nome as NomeTimeCasa, p.placarTimeCasa as PlacarTimeCasa, p.idTimeFora as IdTimeFora, timeFora.nome as NomeTimeFora, p.placarTimeFora as PlacarTimeFora, p.idCampeonato as IdCampeonato, c.Nome as NomeCampeonato" +
                         " from Partida p" +
                         " left join Time timeCasa on (p.idTimeCasa = timeCasa.id)" +
                         " left join Time timeFora on (p.idTimeFora = timeFora.id)" +

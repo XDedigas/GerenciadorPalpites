@@ -15,15 +15,22 @@
     <link href="~/Content/Cadastro/Time.css" rel="stylesheet" />
 }
 
+@section FiltroTamanhoPagina {
+    @using (Html.BeginForm(ViewBag.ActionName as string, ViewBag.ControllerName as string, FormMethod.Get, new { @name = "FormTamPag" }))
+    {
+        @Html.DropDownList("ddl_tam_pag", (SelectList)ViewBag.ListaTamPag, new { @class = "selectpicker", @onchange = "tamanhoPaginaChanged()" })
+        @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string, new { @id = "hiddenTamanhoPagina" });
+        @Html.Hidden("ordenacao", ViewBag.CurrentSort as string);
+        @Html.Hidden("filtro", ViewBag.CurrentFilter as string);
+    }
+}
+
 @section TituloGrid {
     <th>
         @Html.ActionLink("Nome", "Index", new { ordenacao = ViewBag.NameSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "nome" })
     </th>
     <th>
         @Html.ActionLink("País", "Index", new { ordenacao = ViewBag.CountrySortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "pais" })
-    </th>
-    <th>
-        @Html.ActionLink("Ativo", "Index", new { ordenacao = ViewBag.ActiveSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "ativo" })
     </th>
     <th>Ação</th>
 }
@@ -38,7 +45,6 @@
         <tr data-id="{{ Id }}">
             <td>{{ Nome }}</td>
             <td>{{ NomePais }}</td>
-            <td>{{ #Ativo }}Sim{{ /Ativo }}{{ ^Ativo }}Não{{ /Ativo }}</td>
             <td>
                 <button type="button" class="btn btn-danger btn-success"><i class="glyphicon glyphicon-transfer"></i> Comparar</button>
             </td>

@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 10px; margin-bottom: 10px;">
             @Html.Label("ddl_campeonato", "Campeonato", new { @class = "control-label" })
             @Html.DropDownList("ddl_campeonato", new SelectList(ViewBag.Campeonato, "Id", "Nome"), new { @class = "form-control" })
         </div>
@@ -55,4 +55,9 @@
             </td>
         </tr>
     </script>
+    <script>
+        var tituloPagina = '@ViewBag.Title';
+        var urlSalvar = '@Url.Action("SalvarBolao", ViewBag.ControllerName)';
+    </script>
+    <script src="~/Scripts/Cadastro/Bolao.js"></script>
 }

@@ -15,30 +15,67 @@
     <link href="~/Content/Cadastro/Partida.css" rel="stylesheet" />
 }
 
+@section FiltroTamanhoPagina {
+    @using (Html.BeginForm(ViewBag.ActionName as string, ViewBag.ControllerName as string, FormMethod.Get, new { @name = "FormTamPag" }))
+    {
+        @Html.DropDownList("ddl_tam_pag", (SelectList)ViewBag.ListaTamPag, new { @class = "selectpicker", @onchange = "tamanhoPaginaChanged()" })
+        @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string, new { @id = "hiddenTamanhoPagina" });
+        @Html.Hidden("time", ViewBag.CurrentTeam as string);
+        @Html.Hidden("campeonato", ViewBag.CurrentChampionship as string);
+        @Html.Hidden("ordenacao", ViewBag.CurrentSort as string);
+        @Html.Hidden("filtro", ViewBag.CurrentFilter as string);
+    }
+}
+
+@section FiltrosAdicionais {
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-4">
+            @using (Html.BeginForm(ViewBag.ActionName as string, ViewBag.ControllerName as string, FormMethod.Get, new { @name = "FormTimes" }))
+            {
+                @Html.DropDownList("ddl_times", (SelectList)ViewBag.ListaTimes, new { @class = "selectpicker", @onchange = "timeChanged()" })
+                @Html.Hidden("time", ViewBag.CurrentTeam as string, new { @id = "hiddenTime" });
+                @Html.Hidden("campeonato", ViewBag.CurrentChampionship as string);
+                @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string);
+                @Html.Hidden("ordenacao", ViewBag.CurrentSort as string);
+            }
+        </div>
+        <div class="col-md-8">
+            @using (Html.BeginForm(ViewBag.ActionName as string, ViewBag.ControllerName as string, FormMethod.Get, new { @name = "FormCampeonatos" }))
+            {
+                @Html.DropDownList("ddl_campeonatos", (SelectList)ViewBag.ListaCampeonatos, new { @class = "selectpicker", @onchange = "campeonatoChanged()" })
+                @Html.Hidden("campeonato", ViewBag.CurrentChampionship as string, new { @id = "hiddenCampeonato" });
+                @Html.Hidden("time", ViewBag.CurrentTeam as string);
+                @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string);
+                @Html.Hidden("ordenacao", ViewBag.CurrentSort as string);
+            }
+        </div>
+    </div>
+}
+
 @section TituloGrid {
     <th>
-        @Html.ActionLink("Data", "Index", new { ordenacao = ViewBag.DateSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "data" })
+        @Html.ActionLink("Data", "Index", new { ordenacao = ViewBag.DateSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize, time = ViewBag.CurrentTeam, campeonato = ViewBag.CurrentChampionship }, new { @class = "coluna-grid", data_column_sort = "data" })
     </th>
     <th style="width: 110px;">
-        @Html.ActionLink("Time Casa", "Index", new { ordenacao = ViewBag.HomeTeamSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "timeCasa" })
+        @Html.ActionLink("Time Casa", "Index", new { ordenacao = ViewBag.HomeTeamSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize, time = ViewBag.CurrentTeam, campeonato = ViewBag.CurrentChampionship }, new { @class = "coluna-grid", data_column_sort = "timeCasa" })
     </th>
     <th style="width: 120px;">
-        @Html.ActionLink("Placar Casa", "Index", new { ordenacao = ViewBag.HomeScoreSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarTimeCasa" })
+        @Html.ActionLink("Placar Casa", "Index", new { ordenacao = ViewBag.HomeScoreSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize, time = ViewBag.CurrentTeam, campeonato = ViewBag.CurrentChampionship }, new { @class = "coluna-grid", data_column_sort = "placarTimeCasa" })
     </th>
     <th style="width: 120px;">
-        @Html.ActionLink("Placar Fora", "Index", new { ordenacao = ViewBag.AwayScoreSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarTimeFora" })
+        @Html.ActionLink("Placar Fora", "Index", new { ordenacao = ViewBag.AwayScoreSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize, time = ViewBag.CurrentTeam, campeonato = ViewBag.CurrentChampionship }, new { @class = "coluna-grid", data_column_sort = "placarTimeFora" })
     </th>
     <th style="width: 110px;">
-        @Html.ActionLink("Time Fora", "Index", new { ordenacao = ViewBag.AwayTeamSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "timeFora" })
+        @Html.ActionLink("Time Fora", "Index", new { ordenacao = ViewBag.AwayTeamSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize, time = ViewBag.CurrentTeam, campeonato = ViewBag.CurrentChampionship }, new { @class = "coluna-grid", data_column_sort = "timeFora" })
     </th>
     <th>
-        @Html.ActionLink("Campeonato", "Index", new { ordenacao = ViewBag.ChampionshipSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "campeonato" })
+        @Html.ActionLink("Campeonato", "Index", new { ordenacao = ViewBag.ChampionshipSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize, time = ViewBag.CurrentTeam, campeonato = ViewBag.CurrentChampionship }, new { @class = "coluna-grid", data_column_sort = "campeonato" })
     </th>
 }
 
 @section Paginacao {
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }))
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize, time = ViewBag.CurrentTeam, campeonato = ViewBag.CurrentChampionship }))
 }
 
 @section Scripts{
@@ -53,4 +90,18 @@
         </tr>
     </script>
     <script src="~/Scripts/Cadastro/Partida.js"></script>
+
+    <script>
+
+        function timeChanged() {
+            $('#hiddenTime').val($('#ddl_times').val());
+            document.forms['FormTimes'].submit();
+        }
+
+        function campeonatoChanged() {
+            $('#hiddenCampeonato').val($('#ddl_campeonatos').val());
+            document.forms['FormCampeonatos'].submit();
+        }
+
+    </script>
 }

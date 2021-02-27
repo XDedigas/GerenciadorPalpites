@@ -53,3 +53,13 @@ body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom
 #grid_cadastro thead tr th span {
     cursor: pointer;
 }
+
+div.dropdown-menu.open {
+    max-height: 314px !important;
+    overflow: hidden;
+}
+
+ul.dropdown-menu.inner {
+    max-height: 260px !important;
+    overflow-y: auto;
+}

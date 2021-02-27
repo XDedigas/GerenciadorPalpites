@@ -75,7 +75,7 @@ namespace GerenciadorPalpites.Web.Controllers
             ViewBag.CurrentFilter = termoPesquisa;
 
             List<BolaoViewModel> lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(filtro: termoPesquisa, ordem: ordenacao));
-            ViewBag.Campeonato = Mapper.Map<List<CampeonatoViewModel>>(CampeonatoModel.RecuperarLista(1, 9999));
+            ViewBag.Campeonato = Mapper.Map<List<CampeonatoViewModel>>(CampeonatoModel.RecuperarLista());
 
             int pageNumber = (page ?? 1);
             //Retorna os registros paginados
@@ -114,7 +114,7 @@ namespace GerenciadorPalpites.Web.Controllers
         {
             var resultado = "OK";
             var mensagens = new List<string>();
-            var idSalvo = string.Empty;
+            var url = string.Empty;
 
             if (!ModelState.IsValid)
             {
@@ -125,11 +125,11 @@ namespace GerenciadorPalpites.Web.Controllers
             {
                 try
                 {
-                    var vm = Mapper.Map<BolaoModel>(model);
-                    var id = vm.Salvar();
+                    var bolao = Mapper.Map<BolaoModel>(model);
+                    var id = bolao.Salvar();
                     if (id > 0)
                     {
-                        idSalvo = id.ToString();
+                        url = new UrlHelper(Request.RequestContext).Action("Index", "CadBolao");
                     }
                     else
                     {
@@ -142,7 +142,7 @@ namespace GerenciadorPalpites.Web.Controllers
                 }
             }
 
-            return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });
+            return Json(new { Resultado = resultado, Mensagens = mensagens, Url = url });
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace GerenciadorPalpites.Web.Models
         public int IdCampeonato { get; set; }
         public string Senha { get; set; }
         public bool Publico { get; set; }
+        [NotMapped]
         public string NomeCampeonato { get; set; }
         public virtual CampeonatoModel Campeonato { get; set; }
         #endregion
@@ -171,7 +173,8 @@ namespace GerenciadorPalpites.Web.Models
 
             using (var db = new ContextoBD())
             {
-                ret = db.Bolao.Find(id);
+                var sql = $"select * from Bolao where id = {id}";
+                ret = db.Database.Connection.Query<BolaoModel>(sql).FirstOrDefault();
             }
 
             return ret;
