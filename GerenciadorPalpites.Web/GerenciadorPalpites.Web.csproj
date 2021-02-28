@@ -363,6 +363,7 @@
     <Content Include="Views\Shared\_Classificacao.cshtml" />
     <Content Include="Views\Home\Regulamento.cshtml" />
     <Content Include="Views\Home\PerguntasFrequentes.cshtml" />
+    <Content Include="Views\Conta\CadastrarSe.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

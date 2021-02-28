@@ -25,12 +25,20 @@
                     <ul class="nav navbar-nav">
                         <li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Cadastros
+                                Bolões
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("Meus Bolões", "MeusBoloes", "CadBolao")</li>
                                 <li>@Html.ActionLink("Bolões", "Index", "CadBolao")</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Cadastros
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("Campeonatos", "Index", "CadCampeonato")</li>
                                 <li>@Html.ActionLink("Partidas", "Index", "CadPartida")</li>
                                 <li>@Html.ActionLink("Times", "Index", "CadTime")</li>

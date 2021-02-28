@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -68,12 +69,12 @@ namespace GerenciadorPalpites.Web.Models
                         pos > 0 ? pos - 1 : 0, tamPagina);
                 }
 
-                var sql = 
+                var sql =
                     "select * from usuario" +
                     filtroWhere +
                     $" order by {(string.IsNullOrEmpty(ordem) ? "nome" : ordem)}" +
                     paginacao;
-                    
+
                 ret = db.Database.Connection.Query<UsuarioModel>(sql).ToList();
             }
 
@@ -199,10 +200,10 @@ namespace GerenciadorPalpites.Web.Models
                 this.Senha = CriptoHelper.HashMD5(novaSenha);
                 db.Usuarios.Attach(this);
                 db.Entry(this).Property(x => x.Senha).IsModified = true;
-                db.SaveChanges();
-            }
+                ret = Convert.ToBoolean(db.SaveChanges());
 
-            return ret;
+                return ret;
+            }
         }
 
         #endregion

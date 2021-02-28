@@ -1,6 +1,9 @@
-﻿using GerenciadorPalpites.Web.Models;
+﻿using AutoMapper;
+using GerenciadorPalpites.Web.Models;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
@@ -92,6 +95,55 @@ namespace GerenciadorPalpites.Web.Controllers
                 }
 
                 return View();
+            }
+            else
+            {
+                ModelState.Clear();
+                return View();
+            }
+        }
+
+        [AllowAnonymous]
+        public ActionResult CadastrarSe(UsuarioViewModel model)
+        {
+            ViewBag.Mensagem = null;
+
+            if (HttpContext.Request.HttpMethod.ToUpper() == "POST")
+            {
+                var mensagens = new List<string>();
+                const string _senhaPadrao = "{$127;$188}";
+
+                if (!ModelState.IsValid)
+                {
+                    mensagens = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                }
+                else
+                {
+                    try
+                    {
+                        if (model.Senha == _senhaPadrao)
+                        {
+                            model.Senha = "";
+                        }
+
+                        var vm = Mapper.Map<UsuarioModel>(model);
+                        var id = vm.Salvar();
+                        if (id > 0)
+                        {
+                            ViewBag.Mensagem = new string[] { "ok", "Cadastro realizado com sucesso." };
+                        }
+                        else
+                        {
+                            ViewBag.Mensagem = new string[] { "erro", "Não foi possível efetuar o cadastro." };
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ViewBag.Mensagem = new string[] { "erro", "Não foi possível efetuar o cadastro." };
+                    }
+                }
+
+                return RedirectToAction("Index", "Home");
             }
             else
             {

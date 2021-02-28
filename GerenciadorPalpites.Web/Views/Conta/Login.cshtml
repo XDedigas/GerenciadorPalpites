@@ -31,14 +31,22 @@
                         @Html.LabelFor(m => m.LembrarMe)
                     </div>
                     <div class="col-md-6" style="text-align:right">
-                        @Html.ActionLink("Esqueci minha senha", "EsqueciMinhaSenha", "Conta", null, new { @class="btn btn-primary" })
+                        <input type="submit" class="btn btn-success" value="Login" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" class="btn btn-success" value="Entrar" />
+                    <div class="col-md-4 col-md-offset-2" style="text-align:right">
+                        @Html.ActionLink("Esqueci minha senha", "EsqueciMinhaSenha", "Conta", null, new { @class = "btn btn-primary" })
+                    </div>
+                    <div class="col-md-6" style="text-align:right">
+                        @Html.ActionLink("Cadastrar-se", "CadastrarSe", "Conta", null, new { @class = "btn btn-primary" })
                     </div>
                 </div>
+                @*<div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" class="btn btn-success" value="Entrar" />
+                        </div>
+                    </div>*@
             }
         </section>
     </div>
