@@ -9,9 +9,9 @@
     <link href="~/Content/Cadastro/Classificacao.css" rel="stylesheet" />
 }
 @section TituloGrid {
+    <th><span class="coluna-ordenacao" data-campo="posicao">Posição</span></th>
     <th><span class="coluna-ordenacao" data-campo="variacao">Variação</span></th>
-    <th><span class="coluna-ordenacao" data-campo="posicao">#</span></th>
-    <th><span class="coluna-ordenacao" data-campo="nome">Nome</span></th>
+    <th><span class="coluna-ordenacao" data-campo="nomeUsuario">Nome</span></th>
     <th><span class="coluna-ordenacao" data-campo="total">Total</span></th>
     <th><span class="coluna-ordenacao" data-campo="placarCheio">PC</span></th>
     <th><span class="coluna-ordenacao" data-campo="placarVencedor">PV</span></th>
@@ -45,9 +45,9 @@
     </script>
     <script id="template-grid-alterar" type="x-tmpl-mustache">
         <tr data-id="{{ Id }}">
-            <td>{{ Variacao }}</td>
             <td>{{ Posicao }}</td>
-            <td>{{ Nome }}</td>
+            <td>{{ Variacao }}</td>
+            <td>{{ NomeUsuario }}</td>
             <td>{{ Total }}</td>
             <td>{{ PlacarCheio }}</td>
             <td>{{ PlacarVencedor }}</td>

@@ -1,5 +1,4 @@
-﻿
-@model PagedList.IPagedList<GerenciadorPalpites.Web.Models.BolaoViewModel>
+﻿@model PagedList.IPagedList<GerenciadorPalpites.Web.Models.BolaoViewModel>
 @using PagedList.Mvc;
 
 @{
@@ -8,6 +7,7 @@
     ViewBag.Title = "Bolões";
     ViewBag.Lista = Model;
     ViewBag.ControllerName = "CadBolao";
+    ViewBag.ControllerNameUsuarioBolao = "CadUsuarioBolao";
     ViewBag.ActionName = "Index";
 }
 
@@ -51,13 +51,14 @@
             <td>{{ Nome }}</td>
             <td>{{ NomeCampeonato }}</td>
             <td>
-                <a class="btn btn-success btn-alterar" role="button"><i class="glyphicon glyphicon-plus"></i> Participar</a>
+                <a class="btn btn-success btn-participar" role="button" id="btn-participar"><i class="glyphicon glyphicon-plus"></i> Participar</a>
             </td>
         </tr>
     </script>
     <script>
         var tituloPagina = '@ViewBag.Title';
         var urlSalvar = '@Url.Action("SalvarBolao", ViewBag.ControllerName)';
+        var url_participar = '@Url.Action("SalvarUsuarioBolao", ViewBag.ControllerNameUsuarioBolao)'
     </script>
     <script src="~/Scripts/Cadastro/Bolao.js"></script>
 }

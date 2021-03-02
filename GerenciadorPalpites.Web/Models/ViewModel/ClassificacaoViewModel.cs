@@ -13,5 +13,7 @@ namespace GerenciadorPalpites.Web.Models
         public int PlacarPerdedor { get; set; }
         public int Variacao { get; set; }
         public int AcertouVencedor { get; set; }
+        public string NomeUsuario { get; set; }
+        public int Posicao { get; set; }
     }
 }

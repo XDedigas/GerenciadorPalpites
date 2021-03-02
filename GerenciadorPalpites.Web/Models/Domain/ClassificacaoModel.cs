@@ -17,6 +17,8 @@ namespace GerenciadorPalpites.Web.Models
         public int PlacarPerdedor { get; set; }
         public int Variacao { get; set; }
         public int AcertouVencedor { get; set; }
+        public string NomeUsuario { get; set; }
+        public int Posicao { get; set; }
         public virtual BolaoModel Bolao { get; set; }
         public virtual UsuarioModel Usuario { get; set; }
         #endregion
@@ -43,7 +45,7 @@ namespace GerenciadorPalpites.Web.Models
                 var filtroWhere = "";
                 if (!string.IsNullOrEmpty(filtro))
                 {
-                    filtroWhere = $" where lower(id) like '%{filtro.ToLower()}%'";
+                    filtroWhere = $" where idBolao = {filtro}";
                 }
 
                 var pos = (pagina - 1) * tamPagina;
@@ -54,14 +56,17 @@ namespace GerenciadorPalpites.Web.Models
                     paginacao = $" offset {(pos > 0 ? pos - 1 : 0)} rows fetch next {tamPagina} rows only";
                 }
 
-                var sql = $"select * from Classificacao{filtroWhere} order by {(!string.IsNullOrEmpty(ordem) ? ordem : "id")}{paginacao}";
+                var sql = $"select c.*, u.Nome as NomeUsuario from Classificacao c left join Usuario u on(u.id = c.idUsuario){filtroWhere} order by {(!string.IsNullOrEmpty(ordem) ? ordem : "id")} desc{paginacao}";
 
                 ret = db.Database.Connection.Query<ClassificacaoModel>(sql).ToList();
+                int i = 1;
 
                 foreach (var item in ret)
                 {
                     item.Bolao = BolaoModel.RecuperarPeloId(item.IdBolao);
                     item.Usuario = UsuarioModel.RecuperarPeloId(item.IdUsuario);
+                    item.Posicao = i;
+                    i++;
                 }
             }
 
