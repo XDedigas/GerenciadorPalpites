@@ -15,5 +15,9 @@ namespace GerenciadorPalpites.Web.Models
         public bool Publico { get; set; }
         public string NomeCampeonato { get; set; }
         public CampeonatoModel Campeonato { get; set; }
+        public bool AlterarPontuacao { get; set; }
+        public int PlacarExato { get; set; }
+        public int AcertouVencedor { get; set; }
+        public int GolsFeitos { get; set; }
     }
 }

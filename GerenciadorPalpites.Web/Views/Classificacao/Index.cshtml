@@ -1,48 +1,51 @@
-﻿@model List<GerenciadorPalpites.Web.Models.ClassificacaoViewModel>
+﻿@model PagedList.IPagedList<GerenciadorPalpites.Web.Models.ClassificacaoViewModel>
+@using PagedList.Mvc;
+
 @{
     Layout = "~/Views/Shared/_Classificacao.cshtml";
-    ViewBag.Title = "Classifição";
+    ViewBag.Title = "Classificação";
     ViewBag.Lista = Model;
+    ViewBag.ControllerName = "Classificacao";
+    ViewBag.ActionName = "Index";
 }
+
 @section Styles {
-    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
     <link href="~/Content/Cadastro/Classificacao.css" rel="stylesheet" />
 }
-@section TituloGrid {
-    <th><span class="coluna-ordenacao" data-campo="posicao">Posição</span></th>
-    <th><span class="coluna-ordenacao" data-campo="variacao">Variação</span></th>
-    <th><span class="coluna-ordenacao" data-campo="nomeUsuario">Nome</span></th>
-    <th><span class="coluna-ordenacao" data-campo="total">Total</span></th>
-    <th><span class="coluna-ordenacao" data-campo="placarCheio">PC</span></th>
-    <th><span class="coluna-ordenacao" data-campo="placarVencedor">PV</span></th>
-    <th><span class="coluna-ordenacao" data-campo="placarPerdedor">PP</span></th>
-    <th><span class="coluna-ordenacao" data-campo="acertouVencedor">AV</span></th>
-}
-@section Scripts{
-    <script src="~/Scripts/bootstrap-select.js"></script>
-    <script>
-        var tituloPagina = '@ViewBag.Title';
-        var url_page_click = '@Url.Action("ClassificacaoPagina", "Classificacao")';
-        var url_tam_pag_change = '@Url.Action("ClassificacaoPagina", "Classificacao")';
-        var url_filtro_change = '@Url.Action("ClassificacaoPagina", "Classificacao")';
-        var linhas = [];
 
-        @{
-            var linha = 0;
-            foreach (var item in Model)
-            {
-                linha++;
-                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
-                {
-                    @:linhas.push(@Html.Raw(Json.Encode(item)));
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
-    </script>
+@section TituloGrid {
+    <th>
+        @Html.ActionLink("Posição", "Index", new { ordenacao = ViewBag.PosicaoSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "posicao" })
+    </th>
+    <th>
+        @Html.ActionLink("Variação", "Index", new { ordenacao = ViewBag.VariacaoSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "variacao" })
+    </th>
+    <th>
+        @Html.ActionLink("Nome", "Index", new { ordenacao = ViewBag.NameSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "nome" })
+    </th>
+    <th>
+        @Html.ActionLink("Total", "Index", new { ordenacao = ViewBag.TotalSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "total" })
+    </th>
+    <th>
+        @Html.ActionLink("PC", "Index", new { ordenacao = ViewBag.PCSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarCheio" })
+    </th>
+    <th>
+        @Html.ActionLink("PV", "Index", new { ordenacao = ViewBag.PVSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarVencedor" })
+    </th>
+    <th>
+        @Html.ActionLink("PP", "Index", new { ordenacao = ViewBag.PPSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarPerdedor" })
+    </th>
+    <th>
+        @Html.ActionLink("AV", "Index", new { ordenacao = ViewBag.AVSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "acertouVencedor" })
+    </th>
+}
+
+@section Paginacao {
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, tamanhoPagina = ViewBag.CurrentPageSize }))
+}
+
+@section Scripts{
     <script id="template-grid-alterar" type="x-tmpl-mustache">
         <tr data-id="{{ Id }}">
             <td>{{ Posicao }}</td>
@@ -54,5 +57,8 @@
             <td>{{ PlacarPerdedor }}</td>
             <td>{{ AcertouVencedor }}</td>
         </tr>
+    </script>
+    <script>
+        var tituloPagina = '@ViewBag.Title';
     </script>
 }

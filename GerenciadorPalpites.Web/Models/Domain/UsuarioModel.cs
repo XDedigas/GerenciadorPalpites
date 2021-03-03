@@ -15,7 +15,6 @@ namespace GerenciadorPalpites.Web.Models
         public string Senha { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
-        public virtual List<PerfilModel> Perfis { get; set; }
 
         #endregion
 
@@ -29,7 +28,6 @@ namespace GerenciadorPalpites.Web.Models
             using (var db = new ContextoBD())
             {
                 ret = db.Usuarios
-                    .Include(x => x.Perfis)
                     .Where(x => x.Login == login && x.Senha == senha)
                     .SingleOrDefault();
             }
@@ -159,19 +157,6 @@ namespace GerenciadorPalpites.Web.Models
 
                 db.SaveChanges();
                 ret = this.Id;
-            }
-
-            return ret;
-        }
-
-        public string RecuperarStringNomePerfis()
-        {
-            var ret = string.Empty;
-
-            if (this.Perfis != null && this.Perfis.Count > 0)
-            {
-                var perfis = this.Perfis.Select(x => x.Nome);
-                ret = string.Join(";", perfis);
             }
 
             return ret;

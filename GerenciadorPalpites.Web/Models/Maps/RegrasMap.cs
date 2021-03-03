@@ -12,8 +12,9 @@ namespace GerenciadorPalpites.Web.Models
             HasKey(x => x.Id);
             Property(x => x.Id).HasColumnName("id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(x => x.Descricao).HasColumnName("descricao").HasMaxLength(255).IsRequired();
-            Property(x => x.Pontuacao).HasColumnName("pontuacao").IsRequired();
+            Property(x => x.Pontuacao1).HasColumnName("pontuacao1").IsRequired();
+            Property(x => x.Pontuacao2).HasColumnName("pontuacao2").IsRequired();
+            Property(x => x.Pontuacao3).HasColumnName("pontuacao3").IsRequired();
         }
     }
 }

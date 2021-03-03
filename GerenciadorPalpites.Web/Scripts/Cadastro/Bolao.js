@@ -6,7 +6,13 @@ function getDadosForm() {
     return {
         Id: ($('#id_cadastro').val()) ? $('#id_cadastro').val() : 0,
         Nome: $('#txt_nome').val(),
-        IdCampeonato: $('#ddl_campeonato').val()
+        IdCampeonato: $('#ddl_campeonato').val(),
+        Publico: $('#chk_privado').is(':checked'),
+        Senha: $('#txt_senha').val(),
+        AlterarPontuacao: $('#chk_alterarPontuacao').is(':checked'),
+        PlacarExato: $('#txt_placarExato').val(),
+        AcertouVencedor: $('#txt_acertarVencedor').val(),
+        GolsFeitos: $('#txt_golsTimes').val(),
     };
 }
 
@@ -20,7 +26,7 @@ $(document).on('click', '.btn-participar', function () {
         tr = btn.closest('tr'),
         id = tr.attr('data-id'),
         url = url_participar,
-        param = { 'id': id };
+        param = { 'idBolao': id, 'idUsuario': idUsuario };
 
     bootbox.confirm({
         message: "Realmente deseja participar do bolão?",

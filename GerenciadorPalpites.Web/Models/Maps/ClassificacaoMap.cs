@@ -24,6 +24,8 @@ namespace GerenciadorPalpites.Web.Models
             Property(x => x.PlacarPerdedor).HasColumnName("PlacarPerdedor").IsRequired();
             Property(x => x.Variacao).HasColumnName("Variacao").IsRequired();
             Property(x => x.AcertouVencedor).HasColumnName("AcertouVencedor").IsRequired();
+            Property(x => x.Posicao).HasColumnName("Posicao").IsRequired();
+            Property(x => x.PosicaoAnterior).HasColumnName("PosicaoAnterior").IsRequired();
         }
     }
 }

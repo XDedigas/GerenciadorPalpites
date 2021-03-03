@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using GerenciadorPalpites.Web.Models;
-using System;
+using PagedList;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace GerenciadorPalpites.Web.Controllers
@@ -12,20 +11,34 @@ namespace GerenciadorPalpites.Web.Controllers
     {
         private const int _quantMaxLinhasPorPagina = 5;
 
-        public ActionResult Index(int idBolao)
+        public ActionResult Index(string ordenacao, string tamanhoPagina, int? page)
         {
-            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
-            ViewBag.ListaTipoFiltro = new SelectList(new string[] { "Geral", "Por Mês", "Por Data" }, "Geral");
-            ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
-            ViewBag.PaginaAtual = 1;
+            ViewBag.CurrentSort = ordenacao;
+            ViewBag.PosicaoSortParam = string.IsNullOrEmpty(ordenacao) ? "posicao desc" : "";
+            ViewBag.TotalSortParam = ordenacao == "total" ? "total desc" : "total";
+            ViewBag.VariacaoSortParam = ordenacao == "variacao" ? "variacao desc" : "variacao";
+            ViewBag.NameSortParam = ordenacao == "nome" ? "nome desc" : "nome";
+            ViewBag.PCSortParam = ordenacao == "placarCheio" ? "placarCheio desc" : "placarCheio";
+            ViewBag.PVSortParam = ordenacao == "placarVencedor" ? "placarVencedor desc" : "placarVencedor";
+            ViewBag.PPSortParam = ordenacao == "placarPerdedor" ? "placarPerdedor desc" : "placarPerdedor";
+            ViewBag.AVSortParam = ordenacao == "acertouVencedor" ? "acertouVencedor desc" : "acertouVencedor";
 
-            var lista = Mapper.Map<List<ClassificacaoViewModel>>(ClassificacaoModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina, idBolao.ToString(), "Total"));
-            var quant = ClassificacaoModel.RecuperarQuantidade();
+            //ComboBox para definir o tamanho das páginas
+            if (tamanhoPagina != null)
+                ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, int.Parse(tamanhoPagina));
+            else
+            {
+                ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20 }, _quantMaxLinhasPorPagina);
+                tamanhoPagina = _quantMaxLinhasPorPagina.ToString();
+            }
 
-            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
-            ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
+            ViewBag.CurrentPageSize = tamanhoPagina;
 
-            return View(lista);
+            List<ClassificacaoViewModel> lista = Mapper.Map<List<ClassificacaoViewModel>>(ClassificacaoModel.RecuperarLista(filtro: "", ordem: ordenacao));
+
+            int pageNumber = (page ?? 1);
+            //Retorna os registros paginados
+            return View(lista.ToPagedList(pageNumber, int.Parse(tamanhoPagina)));
         }
 
         [HttpPost]

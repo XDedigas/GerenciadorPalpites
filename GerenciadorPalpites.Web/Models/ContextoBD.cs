@@ -23,7 +23,6 @@ namespace GerenciadorPalpites.Web.Models
             modelBuilder.Configurations.Add(new PaisMap());
             modelBuilder.Configurations.Add(new PalpitesMap());
             modelBuilder.Configurations.Add(new PartidaMap());
-            modelBuilder.Configurations.Add(new PerfilMap());
             modelBuilder.Configurations.Add(new RegrasBolaoMap());
             modelBuilder.Configurations.Add(new RegrasMap());
             modelBuilder.Configurations.Add(new RodadaMap());
@@ -32,7 +31,6 @@ namespace GerenciadorPalpites.Web.Models
             modelBuilder.Configurations.Add(new TimeCampeonatoMap());
             modelBuilder.Configurations.Add(new UsuarioMap());
             modelBuilder.Configurations.Add(new UsuarioBolaoMap());
-            modelBuilder.Configurations.Add(new UsuarioPerfilMap());
         }
 
         public DbSet<BolaoModel> Bolao { get; set; }
@@ -47,7 +45,6 @@ namespace GerenciadorPalpites.Web.Models
         public DbSet<PaisModel> Paises { get; set; }
         public DbSet<PalpitesModel> Palpites { get; set; }
         public DbSet<PartidaModel> Partidas { get; set; }
-        public DbSet<PerfilModel> Perfis { get; set; }
         public DbSet<RegrasBolaoModel> RegrasBolao { get; set; }
         public DbSet<RegrasModel> Regras { get; set; }
         public DbSet<RodadaModel> Rodada { get; set; }
@@ -56,6 +53,5 @@ namespace GerenciadorPalpites.Web.Models
         public DbSet<TimeCampeonatoModel> TimeCampeonato { get; set; }
         public DbSet<UsuarioModel> Usuarios { get; set; }
         public DbSet<UsuarioBolaoModel> UsuarioBolao { get; set; }
-        public DbSet<UsuarioPerfilModel> UsuarioPerfil { get; set; }
     }
 }

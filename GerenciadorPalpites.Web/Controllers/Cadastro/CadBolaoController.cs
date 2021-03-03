@@ -126,7 +126,24 @@ namespace GerenciadorPalpites.Web.Controllers
                 try
                 {
                     var bolao = Mapper.Map<BolaoModel>(model);
+                    bolao.Publico = !bolao.Publico;
                     var id = bolao.Salvar();
+
+                    if (model.AlterarPontuacao)
+                    {
+                        CriarRegra(model.PlacarExato, model.AcertouVencedor, model.GolsFeitos, id);
+                    }
+
+                    UsuarioBolaoModel usuario = new UsuarioBolaoModel();
+                    int idUser = usuario.RecuperarIDPeloNome(User.Identity.Name);
+
+                    UsuarioBolaoViewModel usuarioBolaoModel = new UsuarioBolaoViewModel();
+                    usuarioBolaoModel.IdBolao = id;
+                    usuarioBolaoModel.IdUsuario = idUser;
+
+                    var usuarioMap = Mapper.Map<UsuarioBolaoModel>(usuarioBolaoModel);
+                    usuarioMap.Salvar();
+
                     if (id > 0)
                     {
                         url = new UrlHelper(Request.RequestContext).Action("Index", "CadBolao");
@@ -143,6 +160,28 @@ namespace GerenciadorPalpites.Web.Controllers
             }
 
             return Json(new { Resultado = resultado, Mensagens = mensagens, Url = url });
+        }
+        public void CriarRegra(float valor1, float valor2, float valor3, int idBolao)
+        {
+            RegrasViewModel regraModel = new RegrasViewModel();
+            regraModel.Pontuacao1 = valor1;
+            regraModel.Pontuacao2 = valor2;
+            regraModel.Pontuacao3 = valor3;
+            
+            var regra = Mapper.Map<RegrasModel>(regraModel);
+            int idRegra = regra.RecuperarIDPelosValores(regraModel);
+            
+            if (idRegra == 0)
+            {
+                idRegra = regra.Salvar();
+            }
+
+            RegrasBolaoViewModel regraBolaoModel = new RegrasBolaoViewModel();
+            regraBolaoModel.IdBolao = idBolao;
+            regraBolaoModel.IdRegra = idRegra;
+
+            var regraBolao = Mapper.Map<RegrasBolaoModel>(regraBolaoModel);
+            regraBolao.Salvar();
         }
     }
 }

@@ -197,7 +197,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CriptoHelper.cs" />
-    <Compile Include="Models\Domain\UsuarioPerfilModel.cs" />
     <Compile Include="Models\Domain\UsuarioBolaoModel.cs" />
     <Compile Include="Models\Domain\TimeCampeonatoModel.cs" />
     <Compile Include="Models\Domain\RodadaPartidaModel.cs" />
@@ -209,7 +208,6 @@
     <Compile Include="Models\Domain\ClassificacaoModel.cs" />
     <Compile Include="Models\Domain\CampeonatoRodadaModel.cs" />
     <Compile Include="Models\Domain\EstadioModel.cs" />
-    <Compile Include="Models\Maps\UsuarioPerfilMap.cs" />
     <Compile Include="Models\Maps\UsuarioBolaoMap.cs" />
     <Compile Include="Models\Maps\TimeCampeonatoMap.cs" />
     <Compile Include="Models\Maps\RodadaPartidaMap.cs" />
@@ -224,7 +222,6 @@
     <Compile Include="Models\ViewModel\AlteracaoSenhaUsuarioViewModel.cs" />
     <Compile Include="Models\Domain\CidadeModel.cs" />
     <Compile Include="Models\ContextoBD.cs" />
-    <Compile Include="Models\ViewModel\UsuarioPerfilViewModel.cs" />
     <Compile Include="Models\ViewModel\UsuarioBolaoViewModel.cs" />
     <Compile Include="Models\ViewModel\TimeCampeonatoViewModel.cs" />
     <Compile Include="Models\ViewModel\RodadaPartidaViewModel.cs" />
@@ -255,15 +252,12 @@
     <Compile Include="Models\Maps\BolaoMap.cs" />
     <Compile Include="Models\Maps\CampeonatoMap.cs" />
     <Compile Include="Models\Maps\PaisMap.cs" />
-    <Compile Include="Models\Maps\PerfilMap.cs" />
     <Compile Include="Models\Maps\PartidaMap.cs" />
     <Compile Include="Models\Maps\UsuarioMap.cs" />
     <Compile Include="Models\ViewModel\EsporteViewModel.cs" />
     <Compile Include="Models\ViewModel\NovaSenhaViewModel.cs" />
     <Compile Include="Models\Domain\PaisModel.cs" />
-    <Compile Include="Models\Domain\PerfilModel.cs" />
     <Compile Include="Models\ViewModel\PaisViewModel.cs" />
-    <Compile Include="Models\ViewModel\PerfilViewModel.cs" />
     <Compile Include="Models\Domain\PartidaModel.cs" />
     <Compile Include="Models\Domain\UsuarioModel.cs" />
     <Compile Include="Models\ViewModel\PartidaViewModel.cs" />
@@ -310,7 +304,6 @@
     <Content Include="Scripts\Cadastro\Time.js" />
     <Content Include="Scripts\Cadastro\Bolao.js" />
     <Content Include="Scripts\Cadastro\Campeonato.js" />
-    <Content Include="Scripts\Cadastro\Perfil.js" />
     <Content Include="Scripts\Cadastro\Partida.js" />
     <Content Include="Scripts\Cadastro\Usuario.js" />
     <Content Include="Scripts\comum.js" />

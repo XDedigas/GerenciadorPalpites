@@ -35,7 +35,7 @@ namespace GerenciadorPalpites.Web.Controllers
             if (usuario != null)
             {
                 var tiket = FormsAuthentication.Encrypt(new FormsAuthenticationTicket(
-                    1, usuario.Nome, DateTime.Now, DateTime.Now.AddHours(12), login.LembrarMe, usuario.Id + "|" + usuario.RecuperarStringNomePerfis()));
+                    1, usuario.Nome, DateTime.Now, DateTime.Now.AddHours(12), login.LembrarMe, usuario.Id.ToString()));
                 var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, tiket);
                 Response.Cookies.Add(cookie);
 

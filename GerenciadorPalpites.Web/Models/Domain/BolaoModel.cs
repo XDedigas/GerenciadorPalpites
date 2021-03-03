@@ -17,6 +17,14 @@ namespace GerenciadorPalpites.Web.Models
         [NotMapped]
         public string NomeCampeonato { get; set; }
         public virtual CampeonatoModel Campeonato { get; set; }
+        [NotMapped]
+        public bool AlterarPontuacao { get; set; }
+        [NotMapped]
+        public int PlacarExato { get; set; }
+        [NotMapped]
+        public int AcertouVencedor { get; set; }
+        [NotMapped]
+        public int GolsFeitos { get; set; }
         #endregion
 
         #region Métodos

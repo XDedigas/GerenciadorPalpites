@@ -10,8 +10,9 @@ namespace GerenciadorPalpites.Web.Models
         #region Atributos
 
         public int Id { get; set; }
-        public string Descricao { get; set; }
-        public float Pontuacao { get; set; }
+        public float Pontuacao1 { get; set; }
+        public float Pontuacao2 { get; set; }
+        public float Pontuacao3 { get; set; }
 
         #endregion
 
@@ -29,39 +30,6 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
-        public static List<RegrasModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "")
-        {
-            var ret = new List<RegrasModel>();
-
-            using (var db = new ContextoBD())
-            {
-                var filtroWhere = "";
-                if (!string.IsNullOrEmpty(filtro))
-                {
-                    filtroWhere = string.Format(" where lower(descricao) like '%{0}%'", filtro.ToLower());
-                }
-
-                var pos = (pagina - 1) * tamPagina;
-                var paginacao = "";
-                if (pagina > 0 && tamPagina > 0)
-                {
-                    paginacao = string.Format(" offset {0} rows fetch next {1} rows only",
-                        pos > 0 ? pos - 1 : 0, tamPagina);
-                }
-
-                var sql =
-                    "select *" +
-                    " from Regras" +
-                    filtroWhere +
-                    " order by " + (!string.IsNullOrEmpty(ordem) ? ordem : "descricao") +
-                    paginacao;
-
-                ret = db.Database.Connection.Query<RegrasModel>(sql).ToList();
-            }
-
-            return ret;
-        }
-
         public static RegrasModel RecuperarPeloId(int id)
         {
             RegrasModel ret = null;
@@ -74,23 +42,18 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
-        public static bool ExcluirPeloId(int id)
+        public int RecuperarIDPelosValores(RegrasViewModel model) 
         {
-            var ret = false;
-
-            if (RecuperarPeloId(id) != null)
+            using (var db = new ContextoBD())
             {
-                using (var db = new ContextoBD())
+                var sql = $"select id from Regras where Pontuacao1 = {model.Pontuacao1} and Pontuacao2 = {model.Pontuacao2} and Pontuacao3 = {model.Pontuacao3}";
+                var ret = db.Database.Connection.Query<RegrasModel>(sql).FirstOrDefault();
+                if (ret == null)
                 {
-                    var Regras = new RegrasModel { Id = id };
-                    db.Regras.Attach(Regras);
-                    db.Entry(Regras).State = EntityState.Deleted;
-                    db.SaveChanges();
-                    ret = true;
+                    return 0;
                 }
+                return ret.Id;
             }
-
-            return ret;
         }
 
         public int Salvar()

@@ -15,5 +15,6 @@ namespace GerenciadorPalpites.Web.Models
         public int AcertouVencedor { get; set; }
         public string NomeUsuario { get; set; }
         public int Posicao { get; set; }
+        public int PosicaoAnterior { get; set; }
     }
 }

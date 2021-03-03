@@ -43,6 +43,44 @@
             @Html.DropDownList("ddl_campeonato", new SelectList(ViewBag.Campeonato, "Id", "Nome"), new { @class = "form-control" })
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <div class="col-md-2">
+                @Html.Label("lbl_privado", "Privado?", new { @class = "control-label" })
+                @Html.CheckBox("chk_privado", false, new { @id = "chk_privado", @class = "form-control", @onchange = "visibilidadeSenha();" })
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-md-4">
+                @Html.Label("lbl_AlterarPontuacao", "Alterar pontuações?", new { @class = "control-label" })
+                @Html.CheckBox("chk_alterarPontuacao", false, new { @id = "chk_alterarPontuacao", @class = "form-control", @onchange = "visibilidadePontuacao();" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("lbl_senha", "Senha", new { @id = "lbl_senha", @class = "control-label", @style = "display: none" })
+            @Html.Password("txt_senha", null, new { @class = "form-control", @style = "display: none" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("lbl_placarExato", "Placar Exato", new { @id = "lbl_placarExato", @class = "control-label", @style = "display: none" })
+            @Html.TextBox("txt_placarExato", 5, new { @class = "form-control", @type = "number", @min = 0, @style = "display: none" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("lbl_acertarVencedor", "Acertar o vencedor", new { @id = "lbl_acertarVencedor", @class = "control-label", @style = "display: none" })
+            @Html.TextBox("txt_acertarVencedor", 3, new { @class = "form-control", @type = "number", @min = 0, @style = "display: none" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("lbl_golsTimes", "Acertar Gols de um dos Times", new { @id = "lbl_golsTimes", @class = "control-label", @style = "display: none" })
+            @Html.TextBox("txt_golsTimes", 1, new { @class = "form-control", @type = "number", @min = 0, @style = "display: none" })
+        </div>
+    </div>
 }
 
 @section Scripts{
@@ -56,6 +94,38 @@
         </tr>
     </script>
     <script>
+        function visibilidadeSenha() {
+            if ($('#chk_privado').is(':checked')) {
+                $('#lbl_senha').show();
+                $('#txt_senha').show();
+            }
+            else {
+                $('#lbl_senha').hide();
+                $('#txt_senha').hide();
+            }
+        }
+        function visibilidadePontuacao() {
+            if ($('#chk_alterarPontuacao').is(':checked')) {
+                $('#lbl_placarExato').show();
+                $('#txt_placarExato').show();
+
+                $('#lbl_acertarVencedor').show();
+                $('#txt_acertarVencedor').show();
+
+                $('#lbl_golsTimes').show();
+                $('#txt_golsTimes').show();
+            }
+            else {
+                $('#lbl_placarExato').hide();
+                $('#txt_placarExato').hide();
+
+                $('#lbl_acertarVencedor').hide();
+                $('#txt_acertarVencedor').hide();
+
+                $('#lbl_golsTimes').hide();
+                $('#txt_golsTimes').hide();
+            }
+        }
         var tituloPagina = '@ViewBag.Title';
         var urlSalvar = '@Url.Action("SalvarBolao", ViewBag.ControllerName)';
         var url_participar = '@Url.Action("SalvarUsuarioBolao", ViewBag.ControllerNameUsuarioBolao)'

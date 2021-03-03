@@ -19,7 +19,6 @@ namespace GerenciadorPalpites.Web
             CreateMap<PaisViewModel, PaisModel>();
             CreateMap<PalpitesViewModel, PalpitesModel>();
             CreateMap<PartidaViewModel, PartidaModel>();
-            CreateMap<PerfilViewModel, PerfilModel>();
             CreateMap<RegrasBolaoViewModel, RegrasBolaoModel>();
             CreateMap<RegrasViewModel, RegrasModel>();
             CreateMap<RodadaViewModel, RodadaModel>();
@@ -28,7 +27,6 @@ namespace GerenciadorPalpites.Web
             CreateMap<TimeCampeonatoViewModel, TimeCampeonatoModel>();
             CreateMap<UsuarioViewModel, UsuarioModel>();
             CreateMap<UsuarioBolaoViewModel, UsuarioBolaoModel>();
-            CreateMap<UsuarioPerfilViewModel, UsuarioPerfilModel>();
         }
     }
 }
