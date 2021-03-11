@@ -1,0 +1,92 @@
+﻿
+@model List<GerenciadorPalpites.Web.Models.PalpitesViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewBag.Title = "Palpites";
+    ViewBag.Lista = Model;
+}
+
+<link href="~/Content/Cadastro/BaseCadastro.css" rel="stylesheet" />
+
+<div id="cadastro">
+    <section>
+        <div class="row">
+            <div class="col-md-10"><h1>@ViewBag.Title</h1></div>
+            <div class="col-md-2" style="padding-top: 24px;"><button id="btn_classificacao" class="btn btn-info" type="submit">Classificação</button></div>
+        </div>
+    </section>
+    <section id="cadastro_conteudo">
+        <div id="msg_erro_salvar_palpites" class="alert alert-warning invisivel"></div>
+        <div class="row">
+            <div class="col-md-12">
+                @foreach (var item in Model)
+                {
+                    <div class="panel panel-default palpite" data-idPartida="@item.IdPartida" data-item='{ "id": @item.Id, "idPartida": @item.IdPartida, "idTimeCasa": @item.IdTimeCasa, "idTimeFora": @item.IdTimeFora, "timeCasa": "@item.NomeTimeCasa", "timeFora": "@item.NomeTimeFora" }'>
+                        <div class="panel-body">
+                            <div class="row" style="padding: 0px 15px;">
+                                <div class="col-md-10" style="padding-top: 7px;">
+                                    @item.NomeRodada
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" style="float: right;" type="button" tabindex="-1" data-toggle="collapse" data-target=@($"#collapseUltimasPartidas{item.IdPartida}") aria-expanded="false" aria-controls="@($"collapseUltimasPartidas{item.IdPartida}")">Histórico</button>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top: 8px;">
+                                <div class="col-md-5" style="padding-top: 3px; padding-left: 147px;">@item.NomeTimeCasa</div>
+                                <div class="col-md-2">
+                                    @Html.TextBox("palpiteTimeCasa", item.PalpiteTimeCasa, new { @type = "number", style = "width: 25px; text-align: center;", @min = "0", @max = "99" })
+                                    X
+                                    @Html.TextBox("palpiteTimeFora", item.PalpiteTimeFora, new { @type = "number", style = "width: 25px; text-align: center;", @min = "0", @max = "99" })
+                                </div>
+                                <div class="col-md-5" style="padding-top: 3px; padding-left: 50px;">@item.NomeTimeFora</div>
+                            </div>
+                            <div class="row collapse" id="@($"collapseUltimasPartidas{item.IdPartida}")">
+                                <div class="col-md-12">
+                                    @if (item.UltimasPartidas != null)
+                                    {
+                                        <h4> Últimas @item.UltimasPartidas.Count partidas</h4>
+
+                                        foreach (var partida in item.UltimasPartidas)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-2">@partida.Data.ToShortDateString()</div>
+                                                <div class="col-md-3">@partida.NomeTimeCasa</div>
+                                                <div class="col-md-1">
+                                                    @partida.PlacarTimeCasa X @partida.PlacarTimeFora
+                                                </div>
+                                                <div class="col-md-3">@partida.NomeTimeFora</div>
+                                                <div class="col-md-3">@partida.NomeCampeonato</div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="row">Não há histórico de partidas entre esses times.</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div id="mensagem_grid" style="margin-bottom: 12px;" @Html.Raw(ViewBag.Lista != null && ViewBag.Lista.Count > 0 ? "class=\"invisivel\"" : "")>
+                    Nenhum registro em @ViewBag.Title
+                </div>
+                @if (ViewBag.Lista != null && ViewBag.Lista.Count > 0)
+                {
+                    <button id="btn_salvar_palpites" style="float: right;" class="btn btn-success">Salvar</button>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/Cadastro/Palpite.js"></script>
+    <script>
+        var urlClassificacao = '@Url.Action("Index", "Classificacao", new { idBolao = ViewBag.IdBolao })';
+        var urlSalvarPalpites = '@Url.Action("SalvarPalpites", "Palpite")';
+        var idBolao = @ViewBag.IdBolao;
+    </script>
+}

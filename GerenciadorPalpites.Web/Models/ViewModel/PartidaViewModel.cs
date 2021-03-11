@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GerenciadorPalpites.Web.Models
@@ -8,11 +9,11 @@ namespace GerenciadorPalpites.Web.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Selecione o Time da Casa.")]
-        public int TimeCasa { get; set; }
+        public int IdTimeCasa { get; set; }
         public string NomeTimeCasa { get; set; }
 
         [Required(ErrorMessage = "Selecione o Time de Fora.")]
-        public int TimeFora { get; set; }
+        public int IdTimeFora { get; set; }
         public string NomeTimeFora { get; set; }
 
         [Required(ErrorMessage = "Preencha a Data.")]
@@ -28,5 +29,6 @@ namespace GerenciadorPalpites.Web.Models
         [Required(ErrorMessage = "Selecione o Campeonato.")]
         public int IdCampeonato { get; set; }
         public string NomeCampeonato { get; set; }
+        public string NomeRodada { get; set; }
     }
 }

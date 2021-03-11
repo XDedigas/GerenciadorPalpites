@@ -11,8 +11,9 @@ namespace GerenciadorPalpites.Web.Controllers
     {
         private const int _quantMaxLinhasPorPagina = 5;
 
-        public ActionResult Index(string ordenacao, string tamanhoPagina, int? page)
+        public ActionResult Index(string ordenacao, string tamanhoPagina, int? idBolao, int? page)
         {
+            ViewBag.IdBolao = idBolao ?? 0;
             ViewBag.CurrentSort = ordenacao;
             ViewBag.PosicaoSortParam = string.IsNullOrEmpty(ordenacao) ? "posicao desc" : "";
             ViewBag.TotalSortParam = ordenacao == "total" ? "total desc" : "total";
@@ -45,7 +46,7 @@ namespace GerenciadorPalpites.Web.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult ClassificacaoPagina(int pagina, int tamPag, string filtro, string ordem)
         {
-            var lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(pagina, tamPag, filtro, ordem));
+            var lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(User.Identity.Name, pagina, tamPag, filtro, ordem));
 
             return Json(lista);
         }

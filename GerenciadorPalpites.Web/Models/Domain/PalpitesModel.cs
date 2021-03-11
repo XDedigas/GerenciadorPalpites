@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 
@@ -9,17 +10,25 @@ namespace GerenciadorPalpites.Web.Models
     {
         #region Atributos
         public int Id { get; set; }
-        public int IdParticipante { get; set; }
+        public int IdUsuario { get; set; }
         public int IdBolao { get; set; }
         public int IdTimeCasa { get; set; }
+        [NotMapped]
+        public string NomeTimeCasa { get; set; }
         public int IdTimeFora { get; set; }
+        [NotMapped]
+        public string NomeTimeFora { get; set; }
         public int IdPartida { get; set; }
         public int PalpiteTimeCasa { get; set; }
         public int PalpiteTimeFora { get; set; }
+        [NotMapped]
+        public string NomeRodada { get; set; }
+        [NotMapped]
+        public List<PartidaModel> UltimasPartidas { get; set; }
         public virtual TimeModel TimeCasa { get; set; }
         public virtual TimeModel TimeFora { get; set; }
         public virtual PartidaModel Partida { get; set; }
-        public virtual UsuarioModel Participante { get; set; }
+        public virtual UsuarioModel Usuario { get; set; }
         public virtual BolaoModel Bolao { get; set; }
         #endregion
 
@@ -59,6 +68,24 @@ namespace GerenciadorPalpites.Web.Models
                 var sql = $"select * from Palpites{filtroWhere} order by {(!string.IsNullOrEmpty(ordem) ? ordem : "id")}{paginacao}";
 
                 ret = db.Database.Connection.Query<PalpitesModel>(sql).ToList();
+            }
+
+            return ret;
+        }
+
+        public static PalpitesModel RecuperarPalpiteUsuarioPeloIdPartida(string usuario, int idPartida)
+        {
+            PalpitesModel ret = null;
+
+            using (var db = new ContextoBD())
+            {
+                var sql = 
+                    $"select top 1 Palpites.id as Id, idUsuario as IdUsuario, idBolao as IdBolao, palpiteTimeCasa as PalpiteTimeCasa, palpiteTimeFora as PalpiteTimeFora, idTimeCasa as IdTimeCasa, idTimeFora as IdTimeFora, idPartida as IdPartida" + 
+                    " from Palpites" + 
+                    $" left join Usuario u on(u.id = Palpites.idUsuario) where u.Nome = '{usuario.ToLower()}'" + 
+                    $" and Palpites.idPartida = {idPartida}";
+
+                ret = db.Database.Connection.Query<PalpitesModel>(sql).FirstOrDefault();
             }
 
             return ret;

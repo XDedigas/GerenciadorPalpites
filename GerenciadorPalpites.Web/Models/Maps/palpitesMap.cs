@@ -21,8 +21,8 @@ namespace GerenciadorPalpites.Web.Models
             Property(x => x.IdPartida).HasColumnName("IdPartida").IsRequired();
             HasRequired(x => x.Partida).WithMany().HasForeignKey(x => x.IdPartida).WillCascadeOnDelete(false);
 
-            Property(x => x.IdParticipante).HasColumnName("IdParticipante").IsRequired();
-            HasRequired(x => x.Participante).WithMany().HasForeignKey(x => x.IdParticipante).WillCascadeOnDelete(false);
+            Property(x => x.IdUsuario).HasColumnName("IdUsuario").IsRequired();
+            HasRequired(x => x.Usuario).WithMany().HasForeignKey(x => x.IdUsuario).WillCascadeOnDelete(false);
 
             Property(x => x.IdBolao).HasColumnName("IdBolao").IsRequired();
             HasRequired(x => x.Bolao).WithMany().HasForeignKey(x => x.IdBolao).WillCascadeOnDelete(false);

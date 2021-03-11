@@ -121,4 +121,11 @@ $(document).on('click', '#btn_incluir', function () {
     }).fail(function () {
         failedResponse();
     });
+}).on('click', '#btn_entrar', function () {
+    var btn = $(this),
+        tr = btn.closest('tr'),
+        idBolao = tr.attr('data-id');
+    window.location.href = `${urlPalpite}?idBolao=${idBolao}`;
+}).on('click', '#btn_palpites', function () {
+    window.location.href = urlPalpites;
 });

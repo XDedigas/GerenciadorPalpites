@@ -37,6 +37,8 @@ namespace GerenciadorPalpites.Web.Controllers
             var mensagens = new List<string>();
             var idSalvo = string.Empty;
 
+            model.IdUsuario = UsuarioModel.RecuperarIdPeloNome(model.NomeUsuario);
+
             if (!ModelState.IsValid)
             {
                 resultado = "AVISO";

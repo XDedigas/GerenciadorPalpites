@@ -74,7 +74,7 @@ namespace GerenciadorPalpites.Web.Controllers
 
             ViewBag.CurrentFilter = termoPesquisa;
 
-            List<BolaoViewModel> lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(filtro: termoPesquisa, ordem: ordenacao));
+            List<BolaoViewModel> lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(User.Identity.Name, filtro: termoPesquisa, ordem: ordenacao));
             ViewBag.Campeonato = Mapper.Map<List<CampeonatoViewModel>>(CampeonatoModel.RecuperarLista());
 
             int pageNumber = (page ?? 1);
@@ -86,7 +86,7 @@ namespace GerenciadorPalpites.Web.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult BolaoPagina(int pagina, int tamPag, string filtro, string ordem)
         {
-            var lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(pagina, tamPag, filtro, ordem));
+            var lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(User.Identity.Name, pagina, tamPag, filtro, ordem));
 
             return Json(lista);
         }

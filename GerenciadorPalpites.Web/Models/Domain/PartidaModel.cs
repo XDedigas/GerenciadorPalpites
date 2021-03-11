@@ -24,7 +24,7 @@ namespace GerenciadorPalpites.Web.Models
         public virtual TimeModel TimeFora { get; set; }
         public int PlacarTimeCasa { get; set; }
         public int PlacarTimeFora { get; set; }
-
+        public string NomeRodada { get; set; }
         #endregion
 
         #region Métodos
@@ -150,6 +150,55 @@ namespace GerenciadorPalpites.Web.Models
                         filtroWhere +
                         " order by p.data" +
                         paginacao;
+
+                ret = db.Database.Connection.Query<PartidaModel>(sql).ToList();
+            }
+
+            return ret;
+        }
+
+        public static List<PartidaModel> RecuperarPartidasParaPalpite(long idCampeonato)
+        {
+            var ret = new List<PartidaModel>();
+
+            using (var db = new ContextoBD())
+            {
+                var sql =
+                    "select Partida.id as Id, Partida.data as Data, timeCasa.id as IdTimeCasa, timeCasa.Nome as NomeTimeCasa, timeFora.id as IdTimeFora, timeFora.Nome as NomeTimeFora, Rodada.descricao as NomeRodada from Partida" +
+                    " left join rodadapartida on Partida.id = rodadapartida.idPartida" +
+                    " left join Rodada on rodadapartida.idRodada = Rodada.id" +
+                    " left join Time as timeCasa on Partida.idTimeCasa = timeCasa.id" +
+                    " left join Time as timeFora on Partida.idTimeFora = timeFora.id" +
+                    " where placarTimeCasa = -1" +
+                    " and placarTimeFora = -1" +
+                    $" and data between '{DateTime.Now.AddMinutes(10).ToString("yyyyMMdd HH:mm:ss")}' and '{DateTime.Now.AddDays(7).ToString("yyyyMMdd HH:mm:ss")}'" +
+                    //Código para testes
+                    //$" and data between '{new DateTime(2021, 3, 1).ToString("yyyyMMdd HH:mm:ss")}' and '{new DateTime(2021, 3, 1).AddDays(7).ToString("yyyyMMdd HH:mm:ss")}'" +
+                    $" and Partida.idCampeonato = {idCampeonato}" +
+                    " order by data asc";
+
+                ret = db.Database.Connection.Query<PartidaModel>(sql).ToList();
+            }
+
+            return ret;
+        }
+
+        public static List<PartidaModel> RecuperarUltimasPartidasEntreTimes(int idPrimeiroTime, int idSegundoTime)
+        {
+            var ret = new List<PartidaModel>();
+
+            using (var db = new ContextoBD())
+            {
+                var sql =
+                    "select top 5 Partida.data as Data, timeCasa.Nome as NomeTimeCasa, placarTimeCasa as PlacarTimeCasa, placarTimeFora as PlacarTimeFora, timeFora.Nome as NomeTimeFora, Campeonato.Nome as NomeCampeonato" +
+                    " from Partida" +
+                    " left join Campeonato on Partida.idCampeonato = Campeonato.id" +
+                    " left join Time as timeCasa on Partida.idTimeCasa = timeCasa.id" +
+                    " left join Time as timeFora on Partida.idTimeFora = timeFora.id" +
+                    $" where (idTimeCasa = {idPrimeiroTime} or idTimeFora = {idPrimeiroTime}) and (idTimeCasa = {idSegundoTime} or idTimeFora = {idSegundoTime})" +
+                    " and placarTimeCasa != -1" +
+                    " and placarTimeFora != -1" +
+                    " order by data desc";
 
                 ret = db.Database.Connection.Query<PartidaModel>(sql).ToList();
             }

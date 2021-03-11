@@ -105,6 +105,18 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
+        public static int RecuperarIdPeloNome(string nome)
+        {
+            int ret = 0;
+
+            using (var db = new ContextoBD())
+            {
+                ret = db.Usuarios.Where(x => x.Nome.ToLower() == nome.ToLower()).SingleOrDefault()?.Id ?? 0;
+            }
+
+            return ret;
+        }
+
         public static bool ExcluirPeloId(int id)
         {
             var ret = false;

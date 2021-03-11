@@ -72,7 +72,7 @@ namespace GerenciadorPalpites.Web.Models
         {
             using (var db = new ContextoBD())
             {
-                var sql = $"select id from Usuario where login = '{nome}'";
+                var sql = $"select id from Usuario where nome = '{nome}'";
                 var ret = db.Database.Connection.Query<UsuarioModel>(sql).FirstOrDefault();
                 if (ret == null)
                 {

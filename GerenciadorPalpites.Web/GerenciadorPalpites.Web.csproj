@@ -191,6 +191,7 @@
     <Compile Include="Controllers\Cadastro\CadUsuarioController.cs" />
     <Compile Include="Controllers\Cadastro\CadUsuarioBolaoController.cs" />
     <Compile Include="Controllers\Cadastro\CadCampeonatoController.cs" />
+    <Compile Include="Controllers\Cadastro\PalpiteController.cs" />
     <Compile Include="Controllers\ContaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -301,6 +302,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Cadastro\BaseCadastro.js" />
     <Content Include="Scripts\Cadastro\CadBase.js" />
+    <Content Include="Scripts\Cadastro\Palpite.js" />
     <Content Include="Scripts\Cadastro\Time.js" />
     <Content Include="Scripts\Cadastro\Bolao.js" />
     <Content Include="Scripts\Cadastro\Campeonato.js" />
@@ -357,6 +359,7 @@
     <Content Include="Views\Home\Regulamento.cshtml" />
     <Content Include="Views\Home\PerguntasFrequentes.cshtml" />
     <Content Include="Views\Conta\CadastrarSe.cshtml" />
+    <Content Include="Views\Palpite\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

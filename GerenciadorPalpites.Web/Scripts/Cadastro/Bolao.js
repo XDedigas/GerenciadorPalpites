@@ -26,7 +26,7 @@ $(document).on('click', '.btn-participar', function () {
         tr = btn.closest('tr'),
         id = tr.attr('data-id'),
         url = url_participar,
-        param = { 'idBolao': id, 'idUsuario': idUsuario };
+        param = { 'idBolao': id, 'nomeUsuario': nomeUsuario };
 
     bootbox.confirm({
         message: "Realmente deseja participar do bolão?",

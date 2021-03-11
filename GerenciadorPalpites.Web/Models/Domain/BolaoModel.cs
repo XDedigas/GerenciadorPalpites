@@ -40,7 +40,7 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
-        public static List<BolaoModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "")
+        public static List<BolaoModel> RecuperarLista(string nomeUsuario, int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "")
         {
             var ret = new List<BolaoModel>();
 
@@ -49,7 +49,7 @@ namespace GerenciadorPalpites.Web.Models
                 var filtroWhere = "";
                 if (!string.IsNullOrEmpty(filtro))
                 {
-                    filtroWhere = $" where lower(b.nome) like '%{filtro.ToLower()}%' or lower(c.nome) like '%{filtro.ToLower()}%'";
+                    filtroWhere = $" and lower(b.nome) like '%{filtro.ToLower()}%' or lower(c.nome) like '%{filtro.ToLower()}%'";
                 }
 
                 var pos = (pagina - 1) * tamPagina;
@@ -69,6 +69,9 @@ namespace GerenciadorPalpites.Web.Models
                         sql =
                             "select b.id as id, b.Nome as Nome, b.idCampeonato as idCampeonato, b.Senha as Senha, b.Publico as Publico, c.Nome as NomeCampeonato" +
                             " from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
+                            " where b.id not in (" +
+                                $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Nome = '{nomeUsuario}'" +
+                            ")" +
                             filtroWhere +
                             $" order by c.nome{ordem.ToLower().Replace("campeonato", "")}" +
                             paginacao;
@@ -78,6 +81,9 @@ namespace GerenciadorPalpites.Web.Models
                         sql =
                             "select b.id as id, b.Nome as Nome, b.idCampeonato as idCampeonato, b.Senha as Senha, b.Publico as Publico, c.Nome as NomeCampeonato" +
                             " from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
+                            " where b.id not in (" +
+                                $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Nome = '{nomeUsuario}'" +
+                            ")" +
                             filtroWhere +
                             $" order by b.{ordem}" +
                             paginacao;
@@ -87,6 +93,9 @@ namespace GerenciadorPalpites.Web.Models
                     sql =
                             "select b.id as id, b.Nome as Nome, b.idCampeonato as idCampeonato, b.Senha as Senha, b.Publico as Publico, c.Nome as NomeCampeonato" +
                             " from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
+                            " where b.id not in (" +
+                                $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Nome = '{nomeUsuario}'" +
+                            ")" +
                             filtroWhere +
                             $" order by b.nome" +
                             paginacao;
@@ -126,7 +135,7 @@ namespace GerenciadorPalpites.Web.Models
                         sql =
                         $"select b.id as id, b.Nome as Nome, c.Nome as NomeCampeonato from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
                         " where b.id in (" +
-                            $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Login = '{nomeUsuario}'" +
+                            $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Nome = '{nomeUsuario}'" +
                         ")" +
                         filtroWhere +
                         $" order by c.nome{ordem.ToLower().Replace("campeonato", "")}" +
@@ -137,7 +146,7 @@ namespace GerenciadorPalpites.Web.Models
                         sql =
                            $"select b.id as id, b.Nome as Nome, c.Nome as NomeCampeonato from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
                            " where b.id in (" +
-                               $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Login = '{nomeUsuario}'" +
+                               $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Nome = '{nomeUsuario}'" +
                            ")" +
                            filtroWhere +
                            $" order by b.{ordem}" +
@@ -148,7 +157,7 @@ namespace GerenciadorPalpites.Web.Models
                     sql =
                         $"select b.id as id, b.Nome as Nome, c.Nome as NomeCampeonato from Bolao b left join Campeonato c on b.idCampeonato = c.id" +
                         " where b.id in (" +
-                            $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Login = '{nomeUsuario}'" +
+                            $"select idBolao from usuariobolao left join Usuario u on(u.id = usuariobolao.idUsuario) where u.Nome = '{nomeUsuario}'" +
                         ")" +
                         filtroWhere +
                         " order by b.nome" +
@@ -183,6 +192,18 @@ namespace GerenciadorPalpites.Web.Models
             {
                 var sql = $"select * from Bolao where id = {id}";
                 ret = db.Database.Connection.Query<BolaoModel>(sql).FirstOrDefault();
+            }
+
+            return ret;
+        }
+
+        public static long RecuperarIdCampeonato(long idBolao)
+        {
+            long ret = -1;
+            using (var db = new ContextoBD())
+            {
+                var sql = $"select idCampeonato from Bolao where id = {idBolao}";
+                ret = db.Database.Connection.Query<long>(sql).FirstOrDefault();
             }
 
             return ret;
