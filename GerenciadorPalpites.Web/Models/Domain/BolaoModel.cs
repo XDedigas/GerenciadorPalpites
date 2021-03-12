@@ -40,6 +40,23 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
+        public static bool IsValidPassword(int idBolao, string senha) 
+        {
+            using (var db = new ContextoBD())
+            {
+                return db.Bolao.Find(idBolao).Senha == senha;
+            }
+        }
+
+        public static bool VerificaBolaoPublico(int idBolao) {
+            var IsPublic = true;
+            using (var db = new ContextoBD())
+            {
+                IsPublic = db.Bolao.Find(idBolao).Publico;
+            }
+            return IsPublic;
+        }
+
         public static List<BolaoModel> RecuperarLista(string nomeUsuario, int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "")
         {
             var ret = new List<BolaoModel>();

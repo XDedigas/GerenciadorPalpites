@@ -90,15 +90,15 @@
         <div class="row">
             <div class="col-md-12">
                 @Html.Label("lbl_senha", "Senha", new { @class = "control-label" })
-                @Html.TextBox("txt_senha", "", new { @class = "form-control" })
+                @Html.TextBox("txt_senha_participar", "", new { @class = "form-control" })
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
                     <div class="modal-footer">
-                        <a id="btn_sair" class="btn btn-default" role="button" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Sair</a>
-                        <a id="btn_confirmar_participar" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-ok"></i> Participar</a>
+                        <button id="btn_sair" class="btn btn-default" role="button" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Sair</button>
+                        <button id="btn_confirmar_participar" class="btn btn-primary btn_confirmar_participar" role="button" onclick="participarComSenha()"><i class="glyphicon glyphicon-ok"></i> Participar</button>
                     </div>
                     <div id="msg_aviso_participar" class="alert alert-warning invisivel">Falta preencher o campo acima.</div>
                     <div id="msg_erro_participar" class="alert alert-danger invisible">Ops! Deu ruim!</div>
@@ -131,11 +131,11 @@
         function visibilidadeSenha() {
             if ($('#chk_privado').is(':checked')) {
                 $('#lbl_senha').show();
-                $('#txt_senha').show();
+                $('#txt_senha_participar').show();
             }
             else {
                 $('#lbl_senha').hide();
-                $('#txt_senha').hide();
+                $('#txt_senha_participar').hide();
             }
         }
         function visibilidadePontuacao() {
@@ -163,7 +163,9 @@
         var tituloPagina = '@ViewBag.Title';
         var urlSalvar = '@Url.Action("SalvarBolao", ViewBag.ControllerName)';
         var url_participar = '@Url.Action("SalvarUsuarioBolao", ViewBag.ControllerNameUsuarioBolao)'
-        var nomeUsuario = '@User.Identity.Name';
+        var url_VerificaPublico = '@Url.Action("VerficarBolaoPublico", ViewBag.ControllerName)'
+        var nomeUsuario = '@User.Identity.Name'
+        var idBolao = 0;
     </script>
     <script src="~/Scripts/Cadastro/Bolao.js"></script>
 }

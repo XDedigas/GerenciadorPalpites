@@ -48,11 +48,18 @@ namespace GerenciadorPalpites.Web.Controllers
             {
                 try
                 {
-                    var vm = Mapper.Map<UsuarioBolaoModel>(model);
-                    var id = vm.Salvar();
-                    if (id > 0)
+                    if (BolaoModel.IsValidPassword(model.IdBolao, model.Senha))
                     {
-                        idSalvo = id.ToString();
+                        var vm = Mapper.Map<UsuarioBolaoModel>(model);
+                        var id = vm.Salvar();
+                        if (id > 0)
+                        {
+                            idSalvo = id.ToString();
+                        }
+                        else
+                        {
+                            resultado = "ERRO";
+                        }
                     }
                     else
                     {

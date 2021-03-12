@@ -128,6 +128,11 @@ namespace GerenciadorPalpites.Web.Controllers
 
             return Json(new { Resultado = resultado, Mensagens = mensagens, Url = url });
         }
+        [HttpPost]
+        public JsonResult VerficarBolaoPublico(int idBolao)
+        {
+            return Json(new { IsPublic = BolaoModel.VerificaBolaoPublico(idBolao) });
+        }
         public void CriarRegra(float valor1, float valor2, float valor3, int idBolao)
         {
             RegrasViewModel regraModel = new RegrasViewModel();

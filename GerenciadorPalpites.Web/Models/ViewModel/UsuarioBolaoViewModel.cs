@@ -8,5 +8,6 @@ namespace GerenciadorPalpites.Web.Models
         public int IdUsuario { get; set; }
         public int IdBolao { get; set; }
         public string NomeUsuario { get; set; }
+        public string Senha { get; set; }
     }
 }
