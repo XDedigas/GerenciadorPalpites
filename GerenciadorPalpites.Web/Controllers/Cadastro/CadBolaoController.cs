@@ -8,16 +8,9 @@ using System.Web.Mvc;
 
 namespace GerenciadorPalpites.Web.Controllers
 {
-    [Authorize(Roles = "Gerente,Adm,Operador")]
     public class CadBolaoController : Controller
     {
         private const int _quantMaxLinhasPorPagina = 5;
-
-        public ActionResult InicioBolao(int id)
-        {
-            var lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarBolaoPeloID(id));
-            return View(lista);
-        }
 
         public ActionResult MeusBoloes(string ordenacao, string filtro, string termoPesquisa, string tamanhoPagina, int? page)
         {
@@ -84,32 +77,6 @@ namespace GerenciadorPalpites.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult BolaoPagina(int pagina, int tamPag, string filtro, string ordem)
-        {
-            var lista = Mapper.Map<List<BolaoViewModel>>(BolaoModel.RecuperarLista(User.Identity.Name, pagina, tamPag, filtro, ordem));
-
-            return Json(lista);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult RecuperarBolao(int id)
-        {
-            var vm = Mapper.Map<BolaoViewModel>(BolaoModel.RecuperarPeloId(id));
-
-            return Json(vm);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Gerente,Adm")]
-        [ValidateAntiForgeryToken]
-        public JsonResult ExcluirBolao(int id)
-        {
-            return Json(BolaoModel.ExcluirPeloId(id));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public JsonResult SalvarBolao(BolaoViewModel model)
         {
             var resultado = "OK";
@@ -167,10 +134,10 @@ namespace GerenciadorPalpites.Web.Controllers
             regraModel.Pontuacao1 = valor1;
             regraModel.Pontuacao2 = valor2;
             regraModel.Pontuacao3 = valor3;
-            
+
             var regra = Mapper.Map<RegrasModel>(regraModel);
             int idRegra = regra.RecuperarIDPelosValores(regraModel);
-            
+
             if (idRegra == 0)
             {
                 idRegra = regra.Salvar();

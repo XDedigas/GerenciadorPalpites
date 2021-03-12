@@ -5,7 +5,7 @@
 @{
     Layout = "~/Views/Shared/_CadastroSemIncluir.cshtml";
 
-    ViewBag.Title = "Cadastro de Times";
+    ViewBag.Title = "Times";
     ViewBag.Lista = Model;
     ViewBag.ControllerName = "CadTime";
     ViewBag.ActionName = "Index";
@@ -32,6 +32,9 @@
     <th>
         @Html.ActionLink("País", "Index", new { ordenacao = ViewBag.CountrySortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "pais" })
     </th>
+    <th>
+        @Html.ActionLink("Esporte", "Index", new { ordenacao = ViewBag.SportSortParam, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "Esporte.Nome" })
+    </th>
     <th>Ação</th>
 }
 
@@ -40,13 +43,47 @@
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, filtro = ViewBag.CurrentFilter, tamanhoPagina = ViewBag.CurrentPageSize }))
 }
 
+<div id="modal_cadastro_comparar" class="invisivel" role="dialog">
+    <div id="msg_mensagem_aviso_comparar" class="text-danger invisivel"></div>
+    <fieldset>
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Label("txt_time", "Time", new { @class = "control-label" })
+                @Html.DropDownList("ddl_time", (SelectList)ViewBag.Times, new { @class = "selectpicker", @onchange = "attGrafico()" })
+                @Html.Hidden("infoTime1", "")
+                @Html.Hidden("url_comparar", @Url.Action("RecuperarEstatisticaTime", "CadTime"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <canvas class="pie-chart" hidden="hidden"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="modal-footer">
+                        <a id="btn_sair_comparar" class="btn btn-default" role="button" data-dismiss="modal"> Cancelar</a>
+                    </div>
+                    <div id="msg_aviso_comparar" class="alert alert-warning invisivel">Falta preencher os campos acima.</div>
+                    <div id="msg_erro_comparar" class="alert alert-danger invisible">Ops! Deu ruim!</div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
 @section Scripts {
+    <script src="~/Scripts/Cadastro/Time.js"></script>
+    <script src="~/Scripts/Chart.js"></script>
     <script id="template-grid-alterar" type="x-tmpl-mustache">
         <tr data-id="{{ Id }}">
             <td>{{ Nome }}</td>
             <td>{{ NomePais }}</td>
+            <td>{{ NomeModalidade }}</td>
             <td>
-                <button type="button" class="btn btn-danger btn-success"><i class="glyphicon glyphicon-transfer"></i> Comparar</button>
+                <a id="btn_comparar" class="btn btn-success btn_comparar" role="button"><i class="glyphicon glyphicon-transfer"></i> Comparar</a>
             </td>
         </tr>
     </script>

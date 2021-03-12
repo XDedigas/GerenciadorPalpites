@@ -17,7 +17,7 @@ namespace GerenciadorPalpites.Web.Controllers
             ViewBag.CurrentSort = ordenacao;
             ViewBag.NameSortParam = string.IsNullOrEmpty(ordenacao) ? "nome desc" : "";
             ViewBag.CountrySortParam = ordenacao == "pais" ? "pais desc" : "pais";
-            ViewBag.ActiveSortParam = ordenacao == "ativo" ? "ativo desc" : "ativo";
+            ViewBag.SportSortParam = ordenacao == "Esporte.Nome" ? "Esporte.Nome desc" : "Esporte.Nome";
 
             //ComboBox para definir o tamanho das páginas
             if (tamanhoPagina != null)
@@ -40,70 +40,19 @@ namespace GerenciadorPalpites.Web.Controllers
             //Realiza a busca completa (retorna todos os registros)
             List<TimeViewModel> lista = Mapper.Map<List<TimeViewModel>>(TimeModel.RecuperarLista(filtro: termoPesquisa, ordem: ordenacao));
 
+            var times = TimeModel.RecuperarLista();
+            times.Insert(0, new TimeModel { Id = -1, Nome = "Informe o time..." });
+            ViewBag.Times = new SelectList(times, "Id", "Nome", "-1");
+
             int pageNumber = (page ?? 1);
             //Retorna os registros paginados
             return View(lista.ToPagedList(pageNumber, int.Parse(tamanhoPagina)));
         }
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult TimePagina(int pagina, int tamPag, string filtro, string ordem)
+        public JsonResult RecuperarEstatisticaTime(string idTime1, string idTime2)
         {
-            var lista = Mapper.Map<List<TimeViewModel>>(TimeModel.RecuperarLista(pagina, tamPag, filtro, ordem));
-
-            return Json(lista);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult RecuperarTime(int id)
-        {
-            var vm = Mapper.Map<TimeViewModel>(TimeModel.RecuperarPeloId(id));
+            var vm = Mapper.Map<EstatisticasViewModel>(EstatisticasModel.RecuperarPeloIdsTimes(int.Parse(idTime1), int.Parse(idTime2)));
             return Json(vm);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Gerente,Adm")]
-        [ValidateAntiForgeryToken]
-        public JsonResult ExcluirTime(int id)
-        {
-            return Json(TimeModel.ExcluirPeloId(id));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult SalvarTime(TimeViewModel model)
-        {
-            var resultado = "OK";
-            var mensagens = new List<string>();
-            var idSalvo = string.Empty;
-
-            if (!ModelState.IsValid)
-            {
-                resultado = "AVISO";
-                mensagens = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
-            }
-            else
-            {
-                try
-                {
-                    var vm = Mapper.Map<TimeModel>(model);
-                    var id = vm.Salvar();
-                    if (id > 0)
-                    {
-                        idSalvo = id.ToString();
-                    }
-                    else
-                    {
-                        resultado = "ERRO";
-                    }
-                }
-                catch
-                {
-                    resultado = "ERRO";
-                }
-            }
-            return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });
         }
     }
 }

@@ -25,6 +25,7 @@ namespace GerenciadorPalpites.Web.Models
         public string NomeRodada { get; set; }
         [NotMapped]
         public List<PartidaModel> UltimasPartidas { get; set; }
+        public bool Contabilizado { get; set; }
         public virtual TimeModel TimeCasa { get; set; }
         public virtual TimeModel TimeFora { get; set; }
         public virtual PartidaModel Partida { get; set; }
@@ -79,10 +80,10 @@ namespace GerenciadorPalpites.Web.Models
 
             using (var db = new ContextoBD())
             {
-                var sql = 
-                    $"select top 1 Palpites.id as Id, idUsuario as IdUsuario, idBolao as IdBolao, palpiteTimeCasa as PalpiteTimeCasa, palpiteTimeFora as PalpiteTimeFora, idTimeCasa as IdTimeCasa, idTimeFora as IdTimeFora, idPartida as IdPartida" + 
-                    " from Palpites" + 
-                    $" left join Usuario u on(u.id = Palpites.idUsuario) where u.Nome = '{usuario.ToLower()}'" + 
+                var sql =
+                    $"select top 1 Palpites.id as Id, idUsuario as IdUsuario, idBolao as IdBolao, palpiteTimeCasa as PalpiteTimeCasa, palpiteTimeFora as PalpiteTimeFora, idTimeCasa as IdTimeCasa, idTimeFora as IdTimeFora, idPartida as IdPartida" +
+                    " from Palpites" +
+                    $" left join Usuario u on(u.id = Palpites.idUsuario) where u.Nome = '{usuario.ToLower()}'" +
                     $" and Palpites.idPartida = {idPartida}";
 
                 ret = db.Database.Connection.Query<PalpitesModel>(sql).FirstOrDefault();

@@ -33,19 +33,9 @@
                                 <li>@Html.ActionLink("Bolões", "Index", "CadBolao")</li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Cadastros
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Campeonatos", "Index", "CadCampeonato")</li>
-                                <li>@Html.ActionLink("Partidas", "Index", "CadPartida")</li>
-                                <li>@Html.ActionLink("Times", "Index", "CadTime")</li>
-                                <li class="nav-divider"></li>
-                                <li>@Html.ActionLink("Usuários", "Index", "CadUsuario")</li>
-                            </ul>
-                        </li>
+                        <li>@Html.ActionLink("Campeonatos", "Index", "CadCampeonato")</li>
+                        <li>@Html.ActionLink("Partidas", "Index", "CadPartida")</li>
+                        <li>@Html.ActionLink("Times", "Index", "CadTime")</li>
                     </ul>
                     using (Html.BeginForm("LogOff", "Conta", FormMethod.Post, new { id = "logoffForm" }))
                     {

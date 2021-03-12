@@ -352,8 +352,6 @@
     <Content Include="Views\CadPartida\Index.cshtml" />
     <Content Include="Views\Shared\_Cadastro.cshtml" />
     <Content Include="Views\CadBolao\MeusBoloes.cshtml" />
-    <Content Include="Views\CadBolao\InicioBolao.cshtml" />
-    <Content Include="Views\Shared\_InicioBolao.cshtml" />
     <Content Include="Views\Classificacao\Index.cshtml" />
     <Content Include="Views\Shared\_Classificacao.cshtml" />
     <Content Include="Views\Home\Regulamento.cshtml" />

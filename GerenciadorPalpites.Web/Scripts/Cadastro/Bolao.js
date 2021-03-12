@@ -23,11 +23,29 @@ function add_anti_forgery_token(data) {
 
 $(document).on('click', '.btn-participar', function () {
     var btn = $(this),
-        tr = btn.closest('tr'),
+        modal_cadastro_participar = $('#modal_cadastro_participar');
+
+    $('#msg_mensagem_aviso_participar').empty();
+    $('#msg_aviso_participar').hide();
+    $('#msg_mensagem_participar').hide();
+    $('#msg_erro_participar').hide();
+
+    bootbox.dialog({
+        title: 'Participar do Bolão',
+        message: modal_cadastro_participar,
+        className: 'dialogo',
+    }).on('shown.bs.modal', function () {
+        modal_cadastro_participar.show(0, function () {
+            setFocusForm();
+        });
+    }).on('hidden.bs.modal', function () {
+        modal_cadastro_participar.hide().appendTo('body');
+    })
+}).on('click', '.btn_confirmar_participar'), function () {
+    tr = btn.closest('tr'),
         id = tr.attr('data-id'),
         url = url_participar,
         param = { 'idBolao': id, 'nomeUsuario': nomeUsuario };
-
     bootbox.confirm({
         message: "Realmente deseja participar do bolão?",
         buttons: {
@@ -50,7 +68,7 @@ $(document).on('click', '.btn-participar', function () {
                             $('#grid_cadastro').addClass('invisivel');
                             $('#mensagem_grid').removeClass('invisivel');
                         }
-                        
+
                     }
                 }).fail(function () {
                     swal('Aviso', 'Não foi possível participar do bolão. Tente novamente em instantes.', 'warning');
@@ -58,4 +76,4 @@ $(document).on('click', '.btn-participar', function () {
             }
         }
     });
-})
+}

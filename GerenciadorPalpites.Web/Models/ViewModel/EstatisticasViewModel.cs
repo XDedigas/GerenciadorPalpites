@@ -11,5 +11,7 @@ namespace GerenciadorPalpites.Web.Models
         public int VitoriasTimeB { get; set; }
         public int Empates { get; set; }
         public int Total { get; set; }
+        public string NomeTimeA { get; set; }
+        public string NomeTimeB { get; set; }
     }
 }

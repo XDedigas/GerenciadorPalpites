@@ -137,7 +137,7 @@ namespace GerenciadorPalpites.Web.Controllers
                             ViewBag.Mensagem = new string[] { "erro", "Não foi possível efetuar o cadastro." };
                         }
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         ViewBag.Mensagem = new string[] { "erro", "Não foi possível efetuar o cadastro." };
                     }

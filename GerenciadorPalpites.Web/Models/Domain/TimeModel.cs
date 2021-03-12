@@ -11,31 +11,20 @@ namespace GerenciadorPalpites.Web.Models
 
         public int Id { get; set; }
         public string Nome { get; set; }
+        public string NomeFantasia { get; set; }
         public int IdPais { get; set; }
         public string NomePais { get; set; }
+        public int Modalidade { get; set; }
+        public string NomeModalidade { get; set; }
         public virtual PaisModel Pais { get; set; }
         public int IdEstado { get; set; }
         public virtual EstadoModel Estado { get; set; }
         public int IdCidade { get; set; }
         public virtual CidadeModel Cidade { get; set; }
-        public bool Ativo { get; set; }
 
         #endregion
 
         #region Métodos
-
-        public static int RecuperarQuantidade()
-        {
-            var ret = 0;
-
-            using (var db = new ContextoBD())
-            {
-                ret = db.Time.Count();
-            }
-
-            return ret;
-        }
-
         public static List<TimeModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "")
         {
             var ret = new List<TimeModel>();
@@ -62,29 +51,51 @@ namespace GerenciadorPalpites.Web.Models
                 {
                     if (ordem.ToLower().StartsWith("pais"))
                     {
-                        sql = "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time left join Pais on Time.idPais = Pais.id" +
+                        sql = "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade, Esporte.Nome as NomeModalidade from Time left join Esporte on(Esporte.id = Time.Modalidade) left join Pais on Time.idPais = Pais.id" +
                               filtroWhere +
                               $" order by Pais.Nome{ordem.ToLower().Replace("pais", "")}" +
                               paginacao;
                     }
+                    else if (ordem.ToLower().StartsWith("esporte.nome"))
+                    {
+                        sql = "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade, Esporte.Nome as NomeModalidade from Time left join Esporte on(Esporte.id = Time.Modalidade) left join Pais on Time.idPais = Pais.id" +
+                              filtroWhere +
+                              $" order by {ordem} {paginacao}";
+                    }
                     else
-                        sql =
-                    "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time left join Pais on Time.idPais = Pais.id" +
-                    filtroWhere +
-                    $" order by Time.{ordem}" +
-                    paginacao;
+                    {
+                        sql = "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade, Esporte.Nome as NomeModalidade from Time left join Esporte on(Esporte.id = Time.Modalidade) left join Pais on Time.idPais = Pais.id" +
+                              filtroWhere +
+                              $" order by Time.{ordem}" +
+                              paginacao;
+                    }
                 }
                 else
-                    sql =
-                    "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade from Time left join Pais on Time.idPais = Pais.id" +
-                    filtroWhere +
-                    " order by nome" +
-                    paginacao;
+                {
+                    sql = "select Time.id as id, Time.Nome as nome, Pais.Nome as NomePais, idPais as IdPais, idEstado as IdEstado, idCidade as IdCidade, Esporte.Nome as NomeModalidade from Time left join Esporte on(Esporte.id = Time.Modalidade) left join Pais on Time.idPais = Pais.id" +
+                          filtroWhere +
+                          " order by nome" +
+                          paginacao;
+                }
 
                 ret = db.Database.Connection.Query<TimeModel>(sql).ToList();
             }
 
             return ret;
+        }
+
+        public static string RecuperarNomeTimePeloID(int id)
+        {
+            using (var db = new ContextoBD())
+            {
+                var sql = $"select nome from Time where id = '{id}'";
+                var ret = db.Database.Connection.Query<UsuarioModel>(sql).FirstOrDefault();
+                if (ret == null)
+                {
+                    return "";
+                }
+                return ret.Nome;
+            }
         }
 
         public static TimeModel RecuperarPeloId(int id)

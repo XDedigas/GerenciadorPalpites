@@ -15,6 +15,8 @@ namespace GerenciadorPalpites.Web.Models
         public int VitoriasTimeB { get; set; }
         public int Empates { get; set; }
         public int Total { get; set; }
+        public string NomeTimeA { get; set; }
+        public string NomeTimeB { get; set; }
         public virtual TimeModel TimeA { get; set; }
         public virtual TimeModel TimeB { get; set; }
         #endregion
@@ -67,6 +69,36 @@ namespace GerenciadorPalpites.Web.Models
             using (var db = new ContextoBD())
             {
                 ret = db.Estatisticas.Find(id);
+            }
+
+            return ret;
+        }
+
+        public static EstatisticasModel RecuperarPeloIdsTimes(int idTime1, int idTime2)
+        {
+            EstatisticasModel ret = null;
+
+            using (var db = new ContextoBD())
+            {
+                var sql = $"select e.* from Estatisticas e where (e.idTimeA = {idTime1} and e.idTimeB = {idTime2}) or (e.idTimeA = {idTime2} and e.idTimeB = {idTime1})";
+                ret = db.Database.Connection.Query<EstatisticasModel>(sql).FirstOrDefault();
+
+                if (ret == null)
+                {
+                    ret = new EstatisticasModel()
+                    {
+                        VitoriasTimeA = 0,
+                        VitoriasTimeB = 0,
+                        Empates = 0,
+                        NomeTimeA = TimeModel.RecuperarNomeTimePeloID(idTime1),
+                        NomeTimeB = TimeModel.RecuperarNomeTimePeloID(idTime2)
+                    };
+                }
+                else
+                {
+                    ret.NomeTimeA = TimeModel.RecuperarNomeTimePeloID(ret.IdTimeA);
+                    ret.NomeTimeB = TimeModel.RecuperarNomeTimePeloID(ret.IdTimeB);
+                }
             }
 
             return ret;

@@ -1,8 +1,11 @@
-﻿function set_dados_form(dados) {
+﻿function setFocusForm() {
+    $('#ddl_time').focus();
+}
+
+function set_dados_form(dados) {
     $('#id_cadastro').val(dados.Id);
     $('#txt_nome').val(dados.Nome);
-    $('#cbx_ativo').prop('checked', dados.Ativo);
-    
+
     var inclusao = (dados.Id == 0);
     if (inclusao) {
         $('#ddl_estado').empty();
@@ -90,8 +93,7 @@ function get_dados_inclusao() {
         Nome: '',
         IdPais: 0,
         IdEstado: 0,
-        IdCidade: 0,
-        Ativo: true
+        IdCidade: 0
     };
 }
 
@@ -101,21 +103,40 @@ function get_dados_form() {
         Nome: $('#txt_nome').val(),
         IdPais: $('#ddl_pais').val(),
         IdEstado: $('#ddl_estado').val(),
-        IdCidade: $('#ddl_cidade').val(),
-        Ativo: $('#cbx_ativo').prop('checked')
+        IdCidade: $('#ddl_cidade').val()
     };
 }
 
 function preencher_linha_grid(param, linha) {
-    linha
-        .eq(0).html(param.Nome).end()
-        .eq(1).html(param.Ativo ? 'SIM' : 'NÃO');
+    linha.eq(0).html(param.Nome).end();
 }
 
 $(document)
-.on('change', '#ddl_pais', function () {
-    mudar_pais();
-})
-.on('change', '#ddl_estado', function () {
-    mudar_estado();
-});
+    .on('change', '#ddl_pais', function () {
+        mudar_pais();
+    })
+    .on('change', '#ddl_estado', function () {
+        mudar_estado();
+    }).on('click', '#btn_comparar', function () {
+        var btn = $(this),
+            id = btn.closest('tr').attr('data-id'),
+            modalCadastro = $('#modal_cadastro_comparar');
+        document.getElementById('infoTime1').value = id;
+
+        $('#msg_mensagem_aviso_comparar').empty();
+        $('#msg_aviso_comparar').hide();
+        $('#msg_mensagem_aviso_comparar').hide();
+        $('#msg_erro_comparar').hide();
+
+        bootbox.dialog({
+            title: 'Comparador de Times',
+            message: modalCadastro,
+            className: 'dialogo',
+        }).on('shown.bs.modal', function () {
+            modalCadastro.show(0, function () {
+                setFocusForm();
+            });
+        }).on('hidden.bs.modal', function () {
+            modalCadastro.hide().appendTo('body');
+        });;
+    });

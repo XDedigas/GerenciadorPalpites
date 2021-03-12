@@ -36,9 +36,9 @@
                             <div class="row" style="padding-top: 8px;">
                                 <div class="col-md-5" style="padding-top: 3px; padding-left: 147px;">@item.NomeTimeCasa</div>
                                 <div class="col-md-2">
-                                    @Html.TextBox("palpiteTimeCasa", item.PalpiteTimeCasa, new { @type = "number", style = "width: 25px; text-align: center;", @min = "0", @max = "99" })
+                                    @Html.TextBox("palpiteTimeCasa", item.PalpiteTimeCasa, new { style = "width: 30px; text-align: center;" })
                                     X
-                                    @Html.TextBox("palpiteTimeFora", item.PalpiteTimeFora, new { @type = "number", style = "width: 25px; text-align: center;", @min = "0", @max = "99" })
+                                    @Html.TextBox("palpiteTimeFora", item.PalpiteTimeFora, new { style = "width: 30px; text-align: center;" })
                                 </div>
                                 <div class="col-md-5" style="padding-top: 3px; padding-left: 50px;">@item.NomeTimeFora</div>
                             </div>
@@ -84,6 +84,14 @@
 
 @section Scripts {
     <script src="~/Scripts/Cadastro/Palpite.js"></script>
+    <script>
+        document.getElementById('palpiteTimeFora').oninput = function () {
+            this.value = this.value.replace(/[^0-9]+/g, '');
+        }
+        document.getElementById('palpiteTimeCasa').oninput = function () {
+            this.value = this.value.replace(/[^0-9]+/g, '');
+        }
+    </script>
     <script>
         var urlClassificacao = '@Url.Action("Index", "Classificacao", new { idBolao = ViewBag.IdBolao })';
         var urlSalvarPalpites = '@Url.Action("SalvarPalpites", "Palpite")';

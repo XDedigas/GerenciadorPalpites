@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var myBarChart;
+
+$(document).ready(function () {
     var grid = $('#grid_cadastro > tbody');
     for (var i = 0; i < linhas.length; i++) {
         grid.append(criar_linha_grid(linhas[i]));
@@ -56,6 +58,55 @@ function marcar_ordenacao_campo() {
 function tamanhoPaginaChanged() {
     $('#hiddenTamanhoPagina').val($('#ddl_tam_pag').val());
     document.forms['FormTamPag'].submit();
+}
+function attGrafico() {
+    var idtime1 = document.getElementById('infoTime1').value;
+    var idtime2 = $('#ddl_time').val();
+
+    $.ajax({
+        type: 'POST',
+        processData: false,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ 'idTime1': idtime1, 'idTime2': idtime2 }),
+        url: document.getElementById('url_comparar').value,
+        success: function (response) {
+            if (response.VitoriasTimeA === 0 && response.VitoriasTimeB === 0 && response.Empates === 0) {
+                swal('Aviso', 'Não existem estatísticas entre esses times.', 'warning');
+            }
+            else {
+                var ctx = document.getElementsByClassName("pie-chart");
+
+                if (myBarChart) {
+                    myBarChart.destroy();
+                }
+
+                myBarChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [
+                            response.NomeTimeA,
+                            response.NomeTimeB,
+                            "Empates"
+                        ],
+                        datasets: [{
+                            label: 'Estatisticas',
+                            data: [response.VitoriasTimeA, response.VitoriasTimeB, response.Empates],
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)'
+                            ],
+                            hoverOffset: 4
+                        }]
+                    }
+                });
+            }
+        },
+        error: function () {
+            swal('Aviso', 'Não foi possível realizar a comparação. Tente novamente em instantes.', 'warning');
+        }
+    });
 }
 
 function addAntiForgeryToken(data) {

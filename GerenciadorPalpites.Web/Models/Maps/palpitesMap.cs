@@ -29,6 +29,7 @@ namespace GerenciadorPalpites.Web.Models
 
             Property(x => x.PalpiteTimeCasa).HasColumnName("PalpiteTimeCasa").IsRequired();
             Property(x => x.PalpiteTimeFora).HasColumnName("PalpiteTimeFora").IsRequired();
+            Property(x => x.Contabilizado).HasColumnName("Contabilizado").IsRequired();
         }
     }
 }

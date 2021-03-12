@@ -13,7 +13,8 @@ namespace GerenciadorPalpites.Web.Models
             Property(x => x.Id).HasColumnName("id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             Property(x => x.Nome).HasColumnName("nome").HasMaxLength(255).IsRequired();
-            Property(x => x.Ativo).HasColumnName("ativo").IsRequired();
+            Property(x => x.NomeFantasia).HasColumnName("nomeFantasia").HasMaxLength(255);
+            Property(x => x.Modalidade).HasColumnName("modalidade");
             Property(x => x.IdPais).HasColumnName("idPais").IsRequired();
             HasRequired(x => x.Pais).WithMany().HasForeignKey(x => x.IdPais).WillCascadeOnDelete(false);
             Property(x => x.IdEstado).HasColumnName("idEstado").IsRequired();

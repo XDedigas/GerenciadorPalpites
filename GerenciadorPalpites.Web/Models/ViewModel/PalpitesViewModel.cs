@@ -16,6 +16,7 @@ namespace GerenciadorPalpites.Web.Models
         public int PalpiteTimeFora { get; set; }
         public int IdPartida { get; set; }
         public string NomeRodada { get; set; }
+        public bool Contabilizado { get; set; }
         public List<PartidaViewModel> UltimasPartidas { get; set; }
     }
 }

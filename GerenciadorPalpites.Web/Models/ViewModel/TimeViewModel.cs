@@ -20,6 +20,6 @@ namespace GerenciadorPalpites.Web.Models
 
         public string NomePais { get; set; }
 
-        public bool Ativo { get; set; }
+        public string NomeModalidade { get; set; }
     }
 }
