@@ -131,10 +131,12 @@
         function visibilidadeSenha() {
             if ($('#chk_privado').is(':checked')) {
                 $('#lbl_senha').show();
+                $('#txt_senha').show();
                 $('#txt_senha_participar').show();
             }
             else {
                 $('#lbl_senha').hide();
+                $('#txt_senha').hide();
                 $('#txt_senha_participar').hide();
             }
         }
