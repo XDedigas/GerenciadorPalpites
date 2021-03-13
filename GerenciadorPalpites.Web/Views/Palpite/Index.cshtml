@@ -26,8 +26,11 @@
                     <div class="panel panel-default palpite" data-idPartida="@item.IdPartida" data-item='{ "id": @item.Id, "idPartida": @item.IdPartida, "idTimeCasa": @item.IdTimeCasa, "idTimeFora": @item.IdTimeFora, "timeCasa": "@item.NomeTimeCasa", "timeFora": "@item.NomeTimeFora" }'>
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 15px;">
-                                <div class="col-md-10" style="padding-top: 7px;">
+                                <div class="col-md-4" style="padding-top: 7px;">
                                     @item.NomeRodada
+                                </div>
+                                <div class="col-md-6" style="padding-top: 7px;">
+                                    @item.Data
                                 </div>
                                 <div class="col-md-2">
                                     <button class="btn btn-primary" style="float: right;" type="button" tabindex="-1" data-toggle="collapse" data-target=@($"#collapseUltimasPartidas{item.IdPartida}") aria-expanded="false" aria-controls="@($"collapseUltimasPartidas{item.IdPartida}")">Histórico</button>

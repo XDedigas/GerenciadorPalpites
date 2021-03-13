@@ -69,6 +69,7 @@ $(document).on('click', '#btn_classificacao', function () {
             success: function (data) {
                 if (data.Resultado === "OK") {
                     window.location.reload(true);
+                    swal("Sucesso!", "Palpite registrado!", "success");
                 } else if (data.Resultado === 'AVISO') {
                     showErrorMessage(data.Mensagens);
                 } else {

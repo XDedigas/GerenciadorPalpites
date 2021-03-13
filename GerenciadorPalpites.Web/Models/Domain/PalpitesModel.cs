@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -23,6 +24,8 @@ namespace GerenciadorPalpites.Web.Models
         public int PalpiteTimeFora { get; set; }
         [NotMapped]
         public string NomeRodada { get; set; }
+        [NotMapped]
+        public DateTime Data { get; set; }
         [NotMapped]
         public List<PartidaModel> UltimasPartidas { get; set; }
         public bool Contabilizado { get; set; }

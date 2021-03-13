@@ -32,6 +32,7 @@ namespace GerenciadorPalpites.Web.Controllers
                         palpiteView.NomeRodada = partida.NomeRodada;
                         palpiteView.NomeTimeCasa = partida.NomeTimeCasa;
                         palpiteView.NomeTimeFora = partida.NomeTimeFora;
+                        palpiteView.Data = $"Data: {partida.Data.ToString()}";
                     }
                     else
                     {
@@ -45,7 +46,8 @@ namespace GerenciadorPalpites.Web.Controllers
                             NomeTimeFora = partida.NomeTimeFora,
                             NomeRodada = partida.NomeRodada,
                             PalpiteTimeCasa = 0,
-                            PalpiteTimeFora = 0
+                            PalpiteTimeFora = 0,
+                            Data = partida.Data.ToString()
                         };
                     }
 

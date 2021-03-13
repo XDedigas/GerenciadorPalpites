@@ -497,3 +497,4 @@ D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.cspro
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.csproj.CopyComplete
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.dll
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.pdb
+D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.csprojAssemblyReference.cache

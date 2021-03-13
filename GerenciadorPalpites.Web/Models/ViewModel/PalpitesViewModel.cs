@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GerenciadorPalpites.Web.Models
@@ -17,6 +18,7 @@ namespace GerenciadorPalpites.Web.Models
         public int IdPartida { get; set; }
         public string NomeRodada { get; set; }
         public bool Contabilizado { get; set; }
+        public string Data { get; set; }
         public List<PartidaViewModel> UltimasPartidas { get; set; }
     }
 }
