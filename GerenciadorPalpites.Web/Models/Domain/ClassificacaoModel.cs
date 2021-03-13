@@ -37,14 +37,14 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
-        public static List<ClassificacaoModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", string ordem = "")
+        public static List<ClassificacaoModel> RecuperarLista(int pagina = 0, int tamPagina = 0, int filtro = 0, string ordem = "")
         {
             var ret = new List<ClassificacaoModel>();
 
             using (var db = new ContextoBD())
             {
                 var filtroWhere = "";
-                if (!string.IsNullOrEmpty(filtro))
+                if (filtro != 0)
                 {
                     filtroWhere = $" where idBolao = {filtro}";
                 }
@@ -57,7 +57,7 @@ namespace GerenciadorPalpites.Web.Models
                     paginacao = $" offset {(pos > 0 ? pos - 1 : 0)} rows fetch next {tamPagina} rows only";
                 }
 
-                var sql = $"select c.*, u.Nome as NomeUsuario from Classificacao c left join Usuario u on(u.id = c.idUsuario){filtroWhere} order by {(!string.IsNullOrEmpty(ordem) ? ordem : "id")}{paginacao}";
+                var sql = $"select c.*, u.Nome as NomeUsuario from Classificacao c left join Usuario u on(u.id = c.idUsuario){filtroWhere} order by {(!string.IsNullOrEmpty(ordem) ? ordem : "posicao")}{paginacao}";
 
                 ret = db.Database.Connection.Query<ClassificacaoModel>(sql).ToList();
 

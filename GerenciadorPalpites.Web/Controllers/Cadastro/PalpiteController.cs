@@ -25,7 +25,7 @@ namespace GerenciadorPalpites.Web.Controllers
                 foreach (var partida in partidas)
                 {
                     PalpitesViewModel palpiteView = null;
-                    var palpite = PalpitesModel.RecuperarPalpiteUsuarioPeloIdPartida(User.Identity.Name, partida.Id);
+                    var palpite = PalpitesModel.RecuperarPalpiteUsuarioPeloIdPartida(User.Identity.Name, partida.Id, idBolao.Value);
                     if (palpite != null)
                     {
                         palpiteView = Mapper.Map<PalpitesViewModel>(palpite);

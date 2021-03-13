@@ -493,7 +493,6 @@ D:\TCC\TCC FINAL\GerenciadorPalpites.Web\bin\System.Web.WebPages.Deployment.xml
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\bin\System.Web.WebPages.Razor.xml
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\bin\Antlr3.Runtime.pdb
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\bin\Newtonsoft.Json.xml
-D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.csprojAssemblyReference.cache
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.csproj.CoreCompileInputs.cache
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.csproj.CopyComplete
 D:\TCC\TCC FINAL\GerenciadorPalpites.Web\obj\Debug\GerenciadorPalpites.Web.dll

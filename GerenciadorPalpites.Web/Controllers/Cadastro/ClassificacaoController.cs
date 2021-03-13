@@ -35,7 +35,7 @@ namespace GerenciadorPalpites.Web.Controllers
 
             ViewBag.CurrentPageSize = tamanhoPagina;
 
-            List<ClassificacaoViewModel> lista = Mapper.Map<List<ClassificacaoViewModel>>(ClassificacaoModel.RecuperarLista(filtro: "", ordem: ordenacao));
+            List<ClassificacaoViewModel> lista = Mapper.Map<List<ClassificacaoViewModel>>(ClassificacaoModel.RecuperarLista(filtro: ViewBag.IdBolao, ordem: ordenacao));
 
             int pageNumber = (page ?? 1);
             //Retorna os registros paginados

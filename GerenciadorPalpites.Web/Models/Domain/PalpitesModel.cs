@@ -74,7 +74,7 @@ namespace GerenciadorPalpites.Web.Models
             return ret;
         }
 
-        public static PalpitesModel RecuperarPalpiteUsuarioPeloIdPartida(string usuario, int idPartida)
+        public static PalpitesModel RecuperarPalpiteUsuarioPeloIdPartida(string usuario, int idPartida, long idBolao)
         {
             PalpitesModel ret = null;
 
@@ -84,7 +84,8 @@ namespace GerenciadorPalpites.Web.Models
                     $"select top 1 Palpites.id as Id, idUsuario as IdUsuario, idBolao as IdBolao, palpiteTimeCasa as PalpiteTimeCasa, palpiteTimeFora as PalpiteTimeFora, idTimeCasa as IdTimeCasa, idTimeFora as IdTimeFora, idPartida as IdPartida" +
                     " from Palpites" +
                     $" left join Usuario u on(u.id = Palpites.idUsuario) where u.Nome = '{usuario.ToLower()}'" +
-                    $" and Palpites.idPartida = {idPartida}";
+                    $" and Palpites.idPartida = {idPartida}" +
+                    $" and Palpites.idBolao = {idBolao}";
 
                 ret = db.Database.Connection.Query<PalpitesModel>(sql).FirstOrDefault();
             }
