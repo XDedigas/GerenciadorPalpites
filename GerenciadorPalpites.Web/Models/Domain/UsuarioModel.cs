@@ -178,10 +178,12 @@ namespace GerenciadorPalpites.Web.Models
         {
             var ret = false;
 
+            string senhaCripto = CriptoHelper.HashMD5(senhaAtual);
+
             using (var db = new ContextoBD())
             {
                 ret = db.Usuarios
-                    .Where(x => x.Senha == senhaAtual && x.Id == this.Id)
+                    .Where(x => x.Senha == senhaCripto && x.Id == this.Id)
                     .Any();
             }
 

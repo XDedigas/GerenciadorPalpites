@@ -55,8 +55,7 @@ namespace GerenciadorPalpites.Web
                     return;
                 }
 
-                var partes = ticket.UserData;
-                var id = Convert.ToInt32(partes[0]);
+                var id = Convert.ToInt32(ticket.UserData);
 
                 if (Context.User != null)
                 {
