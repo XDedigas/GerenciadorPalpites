@@ -307,6 +307,8 @@
     <Content Include="Scripts\Cadastro\Campeonato.js" />
     <Content Include="Scripts\Cadastro\Partida.js" />
     <Content Include="Scripts\Cadastro\Usuario.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\comum.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
