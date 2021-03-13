@@ -219,6 +219,7 @@ namespace GerenciadorPalpites.Web.Controllers
                 Port = Convert.ToInt32(ConfigurationManager.AppSettings["EmailPorta"]),
                 EnableSsl = (ConfigurationManager.AppSettings["EmailSsl"] == "S"),
                 UseDefaultCredentials = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
                 Credentials = new NetworkCredential(
                     ConfigurationManager.AppSettings["EmailUsuario"],
                     ConfigurationManager.AppSettings["EmailSenha"])
