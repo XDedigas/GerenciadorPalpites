@@ -17,7 +17,7 @@ namespace GerenciadorPalpites.Web.Models
         [Display(Name = "Confirmar Senha:")]
         public string ConfirmacaoSenha { get; set; }
 
-        [Required(ErrorMessage = "Informe o nome")]
+        [Required(ErrorMessage = "Informe o nome completo")]
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "Informe o e-mail")]
