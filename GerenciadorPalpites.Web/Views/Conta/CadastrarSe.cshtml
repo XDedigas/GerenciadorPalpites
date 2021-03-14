@@ -39,6 +39,11 @@
                     @Html.PasswordFor(m => m.Senha, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Senha, "", new { @class = "text-danger" })
                 </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmacaoSenha, new { @class = "control-label" })
+                    @Html.PasswordFor(m => m.ConfirmacaoSenha, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ConfirmacaoSenha, "", new { @class = "text-danger" })
+                </div>
 
                 if (ViewBag.Mensagem != null)
                 {

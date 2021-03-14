@@ -12,6 +12,11 @@ namespace GerenciadorPalpites.Web.Models
         [Required(ErrorMessage = "Informe o senha")]
         public string Senha { get; set; }
 
+        [Compare("Senha", ErrorMessage = "Informe a confirmação da senha")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar Senha:")]
+        public string ConfirmacaoSenha { get; set; }
+
         [Required(ErrorMessage = "Informe o nome")]
         public string Nome { get; set; }
 
