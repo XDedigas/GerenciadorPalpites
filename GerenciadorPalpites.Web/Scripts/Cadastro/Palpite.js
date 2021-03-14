@@ -41,8 +41,8 @@ function getPalpites() {
         var componentePalpiteTimeFora = document.querySelector(`.palpite[data-idpartida="${properties.idPartida}"] #palpiteTimeFora`);
         var palpiteTimeFora = componentePalpiteTimeFora.value;
 
-        if ((!palpiteTimeCasa || isNaN(palpiteTimeCasa) || parseInt(palpiteTimeCasa) < 0 || parseInt(palpiteTimeCasa) > 99) ||
-            (!palpiteTimeFora || isNaN(palpiteTimeFora) || parseInt(palpiteTimeFora) < 0 || parseInt(palpiteTimeFora) > 99)) {
+        if ((!palpiteTimeCasa || isNaN(palpiteTimeCasa) || parseInt(palpiteTimeCasa) < 0) ||
+            (!palpiteTimeFora || isNaN(palpiteTimeFora) || parseInt(palpiteTimeFora) < 0)) {
             erros.push({ mensagem: `O palpite da partida entre ${properties.timeCasa} e ${properties.timeFora} não é válido!` });
         } else {
             palpites.push({ "Id": properties.id, "IdPartida": properties.idPartida, "IdTimeCasa": properties.idTimeCasa, "IdTimeFora": properties.idTimeFora, "PalpiteTimeCasa": parseInt(palpiteTimeCasa), "PalpiteTimeFora": parseInt(palpiteTimeFora), "IdBolao": idBolao });
