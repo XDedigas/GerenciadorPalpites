@@ -100,6 +100,14 @@ namespace GerenciadorPalpites.Web.Controllers
                     {
                         CriarRegra(model.PlacarExato, model.AcertouVencedor, model.GolsFeitos, id);
                     }
+                    else {
+                        RegrasBolaoViewModel regraBolaoModel = new RegrasBolaoViewModel();
+                        regraBolaoModel.IdBolao = id;
+                        regraBolaoModel.IdRegra = 1;
+
+                        var regraBolao = Mapper.Map<RegrasBolaoModel>(regraBolaoModel);
+                        regraBolao.Salvar();
+                    }
 
                     UsuarioBolaoModel usuario = new UsuarioBolaoModel();
                     int idUser = usuario.RecuperarIDPeloNome(User.Identity.Name);
