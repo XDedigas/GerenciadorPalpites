@@ -27,16 +27,16 @@
         @Html.ActionLink("Total", "Index", new { ordenacao = ViewBag.TotalSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "total" })
     </th>
     <th>
-        @Html.ActionLink("PC", "Index", new { ordenacao = ViewBag.PCSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarCheio" })
+        @Html.ActionLink("PE", "Index", new { ordenacao = ViewBag.PCSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarCheio", title = "Acertou placar exato" })
     </th>
     <th>
-        @Html.ActionLink("PV", "Index", new { ordenacao = ViewBag.PVSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarVencedor" })
+        @Html.ActionLink("PV", "Index", new { ordenacao = ViewBag.PVSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarVencedor", title = "Acertou placar vencedor" })
     </th>
     <th>
-        @Html.ActionLink("PP", "Index", new { ordenacao = ViewBag.PPSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarPerdedor" })
+        @Html.ActionLink("PP", "Index", new { ordenacao = ViewBag.PPSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "placarPerdedor", title = "Acertou placar perdedor" })
     </th>
     <th>
-        @Html.ActionLink("AV", "Index", new { ordenacao = ViewBag.AVSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "acertouVencedor" })
+        @Html.ActionLink("AV", "Index", new { ordenacao = ViewBag.AVSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "acertouVencedor", title = "Acertou vencedor" })
     </th>
 }
 
