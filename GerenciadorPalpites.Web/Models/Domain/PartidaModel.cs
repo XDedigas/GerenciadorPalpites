@@ -163,8 +163,25 @@ namespace GerenciadorPalpites.Web.Models
 
             using (var db = new ContextoBD())
             {
-                var sql =
-                    "select Partida.id as Id, Partida.data as Data, timeCasa.id as IdTimeCasa, timeCasa.Nome as NomeTimeCasa, timeFora.id as IdTimeFora, timeFora.Nome as NomeTimeFora, Rodada.descricao as NomeRodada from Partida" +
+                var sql = "";
+                if (idCampeonato == 30 || idCampeonato == 31)
+                {
+                    sql = "select Partida.id as Id, Partida.data as Data, timeCasa.id as IdTimeCasa, timeCasa.Nome as NomeTimeCasa, timeFora.id as IdTimeFora, timeFora.Nome as NomeTimeFora, Rodada.descricao as NomeRodada from Partida" +
+                    " left join rodadapartida on Partida.id = rodadapartida.idPartida" +
+                    " left join Rodada on rodadapartida.idRodada = Rodada.id" +
+                    " left join Time as timeCasa on Partida.idTimeCasa = timeCasa.id" +
+                    " left join Time as timeFora on Partida.idTimeFora = timeFora.id" +
+                    " where placarTimeCasa = -1" +
+                    " and placarTimeFora = -1" +
+                    $" and data between '{DateTime.Now.AddMinutes(10).ToString("yyyyMMdd HH:mm:ss")}' and '{DateTime.Now.AddDays(1).ToString("yyyyMMdd HH:mm:ss")}'" +
+                    //Código para testes
+                    //$" and data between '{new DateTime(2021, 3, 1).ToString("yyyyMMdd HH:mm:ss")}' and '{new DateTime(2021, 3, 1).AddDays(7).ToString("yyyyMMdd HH:mm:ss")}'" +
+                    $" and Partida.idCampeonato = {idCampeonato}" +
+                    " order by data asc";
+                }
+                else 
+                {
+                    sql = "select Partida.id as Id, Partida.data as Data, timeCasa.id as IdTimeCasa, timeCasa.Nome as NomeTimeCasa, timeFora.id as IdTimeFora, timeFora.Nome as NomeTimeFora, Rodada.descricao as NomeRodada from Partida" +
                     " left join rodadapartida on Partida.id = rodadapartida.idPartida" +
                     " left join Rodada on rodadapartida.idRodada = Rodada.id" +
                     " left join Time as timeCasa on Partida.idTimeCasa = timeCasa.id" +
@@ -176,6 +193,7 @@ namespace GerenciadorPalpites.Web.Models
                     //$" and data between '{new DateTime(2021, 3, 1).ToString("yyyyMMdd HH:mm:ss")}' and '{new DateTime(2021, 3, 1).AddDays(7).ToString("yyyyMMdd HH:mm:ss")}'" +
                     $" and Partida.idCampeonato = {idCampeonato}" +
                     " order by data asc";
+                }                    
 
                 ret = db.Database.Connection.Query<PartidaModel>(sql).ToList();
             }
