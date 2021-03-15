@@ -26,13 +26,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-4">
-                        @using (Html.BeginForm(ViewBag.ActionName as string, ViewBag.ControllerName as string, FormMethod.Get, new { @name = "FormTamPag" }))
-                        {
-                            @Html.DropDownList("ddl_tam_pag", (SelectList)ViewBag.ListaTamPag, new { @class = "selectpicker", @onchange = "tamanhoPaginaChanged()" })
-                            @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string, new { @id = "hiddenTamanhoPagina" });
-                            @Html.Hidden("ordenacao", ViewBag.CurrentSort as string);
-                            @Html.Hidden("filtro", ViewBag.CurrentFilter as string);
-                        }
+                        @RenderSection("FiltroTamanhoPagina")
                     </div>
                 </div>
             </div>

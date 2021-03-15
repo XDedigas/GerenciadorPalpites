@@ -13,6 +13,17 @@
     <link href="~/Content/Cadastro/Classificacao.css" rel="stylesheet" />
 }
 
+@section FiltroTamanhoPagina{
+    @using (Html.BeginForm(ViewBag.ActionName as string, ViewBag.ControllerName as string, FormMethod.Get, new { @name = "FormTamPag" }))
+    {
+        @Html.DropDownList("ddl_tam_pag", (SelectList)ViewBag.ListaTamPag, new { @class = "selectpicker", @onchange = "tamanhoPaginaChanged()" })
+        @Html.Hidden("tamanhoPagina", ViewBag.CurrentPageSize as string, new { @id = "hiddenTamanhoPagina" });
+        @Html.Hidden("ordenacao", ViewBag.CurrentSort as string);
+        @Html.Hidden("filtro", ViewBag.CurrentFilter as string);
+        @Html.Hidden("idBolao", ViewBag.IdBolao as string);
+    }
+}
+
 @section TituloGrid {
     <th>
         @Html.ActionLink("Posição", "Index", new { ordenacao = ViewBag.PosicaoSortParam, tamanhoPagina = ViewBag.CurrentPageSize }, new { @class = "coluna-grid", data_column_sort = "posicao" })
@@ -42,7 +53,7 @@
 
 @section Paginacao {
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, tamanhoPagina = ViewBag.CurrentPageSize }))
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ordenacao = ViewBag.CurrentSort, tamanhoPagina = ViewBag.CurrentPageSize, idBolao = ViewBag.IdBolao }))
 }
 
 @section Scripts{
